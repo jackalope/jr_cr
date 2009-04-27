@@ -27,16 +27,15 @@ class jr_cr_session implements phpCR_Session {
         $this->JRsession = $session;
         $this->workspace = new jr_cr_workspace($this->JRsession->getWorkspace(), $this);
 
-        $frontendOptions = array('lifetime' => 1800, // cache lifetime in seconds
+        $frontendOptions = array('lifetime' => 5, // cache lifetime in seconds
 'automatic_serialization' => true);
 
         $backendOptions = array('cache_dir' => '/tmp/')// Directory where to put the cache files
 ;
 
         // getting a Zend_Cache_Core object
-        $this->cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        //$this->cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 
-    //TODO - Insert your code here
     }
 
     /**

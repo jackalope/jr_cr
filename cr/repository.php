@@ -15,7 +15,6 @@ class jr_cr_repository implements phpCR_Repository {
 	        $factory = new java("com.day.crx.jcr.davex.Client",$storage);
 	        $this->JRrepository = $factory->getRepository();
 	    } else if ($transport == 'davex') {
-	        $storage = 'http://localhost:8080/server/';
 	        $client  = new java("ch.liip.jcr.davex.DavexClient",$storage);
 		    $this->JRrepository = $client->getRepository();
 	    } else {

@@ -353,8 +353,6 @@ If another error occurs.
 
     //FIXME selber erfunden, needed for query service later
     public function searchNodes($relPath) {
-        print "<pre>";
-
         $pps = $this->session->parsePath($relPath, $this);
         $nodes = array();
         foreach ($pps as $pp) {
@@ -884,7 +882,7 @@ If another error occurs.
             switch ($type) {
                 case phpCR_PropertyType::BINARY :
                     $pr = new Java("javax.jcr.PropertyType");
-                    $type = $pr->BOOLEAN;
+                    $type = $pr->BINARY;
 
                     $strlen = strlen($value);
                     // keep it in memory, if small
@@ -926,7 +924,6 @@ If another error occurs.
                 default :
                     $type = null;
             }
-
             if (! is_object($value) && $type) {
                 $jrprop = $this->JRnode->setProperty($name, $value, $type);
             } else {
@@ -937,7 +934,6 @@ If another error occurs.
             if ($filename) {
                 unlink($filename);
             }
-
             $property = new jr_cr_property($this, $jrprop);
             $this->addPropertyToList($property);
             if ($isNew) {
@@ -945,7 +941,9 @@ If another error occurs.
             }
             $property->setModified(true);
             $this->setModified(true);
-            $this->session->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+            if ($this->session->cache) {
+                $this->session->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+            }
     }
 
     /**
@@ -1289,7 +1287,7 @@ If another error occurs.
             return null;
         }
 
-        if ($this->properties[$path]) {
+        if (isset($this->properties[$path]) && $this->properties[$path]) {
             return $this->properties[$path];
         }
 

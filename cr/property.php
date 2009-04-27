@@ -11,6 +11,8 @@ class jr_cr_property implements phpCR_Property {
 	 */
 	protected $session = null;
 
+
+
 	/**
 	 * Enter description here...
 	 *
@@ -20,7 +22,7 @@ class jr_cr_property implements phpCR_Property {
 	protected $new = false;
 	protected $modified = false;
 	protected $path = null;
-
+    protected $type = null;
 	protected $JRprop = null;
 
 	/**
@@ -153,7 +155,7 @@ A string representation of the value of this {@link Property}.
      */
     public function getString() {
      $cacheKey = md5("prop::getString::".$this->getPath());
-     if (!$result = $this->session->cache->load($cacheKey)) {
+     if (!($this->session->cache && $result = $this->session->cache->load($cacheKey))) {
 
 
 
@@ -185,8 +187,9 @@ A string representation of the value of this {@link Property}.
                         $data .= chr($len);
                     }
                 }
-                $this->session->cache->save($data,$cacheKey,array(md5($this->getParent()->getPath())));
-
+                if ($this->session->cache) {
+                    $this->session->cache->save($data,$cacheKey,array(md5($this->getParent()->getPath())));
+                }
                 return $data;
                 /* another way, to be benchmarked...
 
@@ -331,7 +334,7 @@ If an error occurs.
 	 * @see phpCR_Item::getName()
 	 */
 	public function getName() {
-        return $this->JRprop->getName();
+	    return $this->JRprop->getName();
 	}
 
 	/**
