@@ -171,6 +171,9 @@ If another error occurs.
 	 * @see phpCR_Workspace::getName()
 	 */
 	public function getName() {
+	    if (empty($this->name)) {
+			$this->name = $this->JRworkspace->getName();
+		}
 		return $this->name;
 	}
 
