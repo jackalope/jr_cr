@@ -425,8 +425,10 @@ if another error occurs.
      * @see phpCR_Session::importXML()
      */
     public function importXML($parentAbsPath, $in, $uuidBehavior) {
-
-    //TODO - Insert your code here
+        //TODO - Add exceptions and stuff
+        $in = new Java('java.io.FileInputStream', $in);
+        return $this->JRsession->importXML($parentAbsPath, $in, $uuidBehavior);
+    
     }
 
     /**
