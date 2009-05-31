@@ -526,11 +526,11 @@ If another error occurs.
      * @see phpCR_Node::getUUID()
      */
     public function getUUID() {
-        if (! empty($this->uuid)) {
-            return $this->uuid;
+        if (empty($this->uuid)) {
+            $this->uuid = $this->JRnode->getUUID();
         }
-
-        return null;
+        
+        return $this->uuid;
     }
 
     /**

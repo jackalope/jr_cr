@@ -5,13 +5,14 @@ class jr_cr_repository implements phpCR_Repository {
 	protected $JRrepository = null;
     protected $storage = null;
 
-	public function __construct($storage,$transport) {
+	public function __construct($storage,$transport, $repository = null) {
 
 	/*    $this->JRrepository = new Java("org.apache.jackrabbit.rmi.repository.URLRemoteRepository","http://localhost:8080/rmi");
 	    return;
 */
-
-	    if ($transport == 'webdav') {
+        if (isset($repository)) {
+            $this->JRrepository = $repository;
+        } else if ($transport == 'webdav') {
 	        $factory = new java("com.day.crx.jcr.davex.Client",$storage);
 	        $this->JRrepository = $factory->getRepository();
 	    } else if ($transport == 'davex') {

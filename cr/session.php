@@ -115,8 +115,7 @@ this session.
      * @see phpCR_Session::getAttribute()
      */
     public function getAttribute($name) {
-
-    //TODO - Insert your code here
+        return $this->JRsession->getAttribute($name);
     }
 
     /**
@@ -125,8 +124,7 @@ this session.
      * @see phpCR_Session::getAttributeNames()
      */
     public function getAttributeNames() {
-
-    //TODO - Insert your code here
+        return $this->JRsession->getAttributeNames();
     }
 
     /**
@@ -248,7 +246,18 @@ If another error occurs
      */
 
     public function getNodeByUUID($uuid) {
-        $JRnode = $this->JRsession->getNodeByUUID($uuid);
+        try {
+            $JRnode = $this->JRsession->getNodeByUUID($uuid);
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 0);
+            if (strstr($str[0], 'ItemNotFoundException')) {
+                throw new phpCR_ItemNotFoundException($e->getMessage());
+            } elseif (strstr($str[0], 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
         $node = new jr_cr_node($this, $JRnode);
         if ($node) {
             $this->addNodeToList($node);
@@ -301,8 +310,8 @@ A {@link Repository} object
      * @see phpCR_Session::getRepository()
      */
     public function getRepository() {
-
-    //TODO - Insert your code here
+        $rep = $this->JRsession->getRepository();
+        return new jr_cr_repository(null, null, $rep);
     }
 
     /**
@@ -332,8 +341,7 @@ A {@link Repository} object
      * @see phpCR_Session::getUserID()
      */
     public function getUserID() {
-
-    //TODO - Insert your code here
+        return $this->JRsession->getUserID();
     }
 
     /**
@@ -427,8 +435,7 @@ if another error occurs.
     public function importXML($parentAbsPath, $in, $uuidBehavior) {
         //TODO - Add exceptions and stuff
         $in = new Java('java.io.FileInputStream', $in);
-        return $this->JRsession->importXML($parentAbsPath, $in, $uuidBehavior);
-    
+        $this->JRsession->importXML($parentAbsPath, $in, $uuidBehavior);
     }
 
     /**
@@ -450,8 +457,10 @@ If an error occurs.
      * @see phpCR_Session::itemExists()
      */
     public function itemExists($absPath) {
-
-    //TODO - Insert your code here
+        if ('/' !== substr($absPath, 0, 1)) {
+            $absPath = '/' . $absPath;
+        }
+        return $this->JRsession->itemExists($absPath);
     }
 
     /**
