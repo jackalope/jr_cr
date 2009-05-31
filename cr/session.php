@@ -327,12 +327,15 @@ A {@link Repository} object
      */
 
     public function getRootNode() {
-        if ($this->rootNode === null) {
-            $this->rootNode = new jr_cr_node($this, $this->JRsession->getRootNode());
-            $this->addNodeToList($this->rootNode);
+        try {
+            if ($this->rootNode === null) {
+                $this->rootNode = new jr_cr_node($this, $this->JRsession->getRootNode());
+                $this->addNodeToList($this->rootNode);
+            }
+            return $this->rootNode;
+        } catch (JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
         }
-
-        return $this->rootNode;
     }
 
     /**
@@ -395,8 +398,7 @@ If another error occurs.
      * @see phpCR_Session::impersonate()
      */
     public function impersonate(phpCR_Credentials $credentials) {
-
-    //TODO - Insert your code here
+        return $this->JRsession->impersonate($credentials->getJRcredentials());
     }
 
     /**
@@ -444,8 +446,7 @@ if another error occurs.
      * @see phpCR_Session::isLive()
      */
     public function isLive() {
-
-    //TODO - Insert your code here
+        return $this->JRsession->isLive();
     }
 
     /**
@@ -457,10 +458,14 @@ If an error occurs.
      * @see phpCR_Session::itemExists()
      */
     public function itemExists($absPath) {
-        if ('/' !== substr($absPath, 0, 1)) {
-            $absPath = '/' . $absPath;
+        try {
+            if ('/' !== substr($absPath, 0, 1)) {
+                $absPath = '/' . $absPath;
+            }
+            return $this->JRsession->itemExists($absPath);
+        } catch (JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
         }
-        return $this->JRsession->itemExists($absPath);
     }
 
     /**

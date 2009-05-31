@@ -107,11 +107,24 @@ class jr_cr_repository implements phpCR_Repository {
      *    If another error occurs.
      */
     public function login($credentials=NULL, $workspaceName=NULL) {
-        if ( !is_object( $credentials) ) {
-
-            return new jr_cr_session($this->JRrepository->login($workspaceName),$workspaceName,$this->storage);
-        } else {
-            return new jr_cr_session($this->JRrepository->login($credentials->getJRcredentials(),$workspaceName),$workspaceName,$this->storage);
+        try {
+            if ( !is_object( $credentials) ) {
+                return new jr_cr_session($this->JRrepository->login($workspaceName),$workspaceName,$this->storage);
+            } else {
+                return new jr_cr_session($this->JRrepository->login($credentials->getJRcredentials(),$workspaceName),$workspaceName,$this->storage);
+            }
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'LoginException')) {
+                throw new phpCR_LoginException($e->getMessage());
+            } elseif (strstr($str, 'NoSuchWorkspaceException')) {
+                throw new phpCR_NoSuchWorkspaceException($e->getMessage());
+            } elseif (strstr($str, 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
         }
     }
 
