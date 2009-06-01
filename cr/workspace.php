@@ -186,8 +186,8 @@ If an error occurs.
 	 * @see phpCR_Workspace::getNamespaceRegistry()
 	 */
 	public function getNamespaceRegistry() {
-
-	//TODO - Insert your code here
+	    $nr = $this->JRworkspace->getNamespaceRegistry();
+        return new jr_cr_namespaceregistry($nr);
 	}
 
 	/**
