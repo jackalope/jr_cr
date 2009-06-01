@@ -411,8 +411,19 @@ If another error occurs.
      * @see phpCR_Node::getPrimaryItem()
      */
     public function getPrimaryItem() {
-
-    //TODO - Insert your code here
+        try {
+            $node = $this->JRnode->getPrimaryItem();
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            if (strstr($str[0], 'ItemNotFound')) {
+                throw new phpCR_ItemNotFoundException($e->getMessage());
+            } elseif (strstr($str[0], 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
+        return new jr_cr_node($this->session, $node);
     }
 
     /**
