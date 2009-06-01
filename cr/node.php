@@ -536,9 +536,19 @@ If another error occurs.
      */
     public function getUUID() {
         if (empty($this->uuid)) {
-            $this->uuid = $this->JRnode->getUUID();
+            try {
+                $this->uuid = $this->JRnode->getUUID();
+            } catch (JavaException $e) {
+                $str = split("\n", $e->getMessage(), 1);
+                if (strstr($str[0], 'UnsupportedRepositoryOperationException')) {
+                    throw new phpCR_UnsupportedRepositoryOperationException($e->getMessage());
+                } elseif (strstr($str[0], 'RepositoryException')) {
+                    throw new phpCR_RepositoryException($e->getMessage());
+                } else {
+                    throw $e;
+                }
+            }
         }
-        
         return $this->uuid;
     }
 
