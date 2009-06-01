@@ -5,7 +5,7 @@
  *
  * @package phpContentRepository
  */
-class jr_cr_propertyiterator  implements phpCR_PropertyIterator{
+class jr_cr_propertyiterator implements phpCR_PropertyIterator{
     protected $JRpropertyiterator;
     
     function __construct($JRpropertyiterator) {
@@ -34,7 +34,7 @@ class jr_cr_propertyiterator  implements phpCR_PropertyIterator{
      * @see phpCR_RangeIterator::getPosition()
      */
     public function getPosition() {
-        //TODO - Insert your code here
+        return $this->JRpropertyiterator->getPosition();
     }
     
     /**
