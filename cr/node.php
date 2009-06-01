@@ -386,17 +386,17 @@ If an unexpected error occurs.
      * @see phpCR_Node::getNodes()
      */
     public function getNodes($namePattern = null) {
-        if ($namePattern) {
-            $jrnodes = $this->JRnode->getNodes($namePattern);
-        } else {
-            $jrnodes = $this->JRnode->getNodes();
+        try {
+            if ($namePattern) {
+                $jrnodes = $this->JRnode->getNodes($namePattern);
+            } else {
+                $jrnodes = $this->JRnode->getNodes();
+            }
+        } catch (JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
         }
-        $nodes = array();
-        while ($jrnodes->hasNext() && $jrnode = $jrnodes->next()) {
-            $nodes[] = $this->session->getNodeByPath($jrnode);
-
-        }
-        return $nodes;
+        
+        return new jr_cr_nodeiterator($jrnodes, $this->session);
     }
 
     /**
