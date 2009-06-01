@@ -443,14 +443,14 @@ If an error occurs.
     public function getProperties($namePattern = '') {
         try {
             if ($namePattern) {
-                $jrnodes = $this->JRnode->getProperties($namePattern);
+                $jrproperties = $this->JRnode->getProperties($namePattern);
             } else {
-                $jrnodes = $this->JRnode->getProperties();
+                $jrproperties = $this->JRnode->getProperties();
             }
         } catch (JavaException $e) {
             throw new phpCR_RepositoryException($e->getMessage());
         }
-        return new jr_cr_propertyiterator($jrnodes, $this->session);
+        return new jr_cr_propertyiterator($jrproperties);
     }
 
     /**

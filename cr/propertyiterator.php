@@ -6,11 +6,9 @@
  * @package phpContentRepository
  */
 class jr_cr_propertyiterator  implements phpCR_PropertyIterator{
-    protected $session;
     protected $JRpropertyiterator;
     
-    function __construct($JRpropertyiterator, $session) {
-        $this->session = $session;
+    function __construct($JRpropertyiterator) {
         $this->JRpropertyiterator = $JRpropertyiterator;
     }
     
@@ -27,7 +25,7 @@ class jr_cr_propertyiterator  implements phpCR_PropertyIterator{
         } catch (JavaException $e) {
             throw new phpCR_NoSuchElementException($e->getMessage());
         }
-        return new jr_cr_property($p, $this->session);
+        return new jr_cr_property($p->getParent(), $p);
     }
     
     /**
