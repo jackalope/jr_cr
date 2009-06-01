@@ -280,8 +280,11 @@ If an error occurs.
      * @see phpCR_Node::getIndex()
      */
     public function getIndex() {
-
-    //TODO - Insert your code here
+        try {
+            return $this->JRnode->getIndex();
+        } catch (JavaException $e) {
+            throw new phpCR_ReposiotryException($e->getMessage());
+        }
     }
 
     /**
