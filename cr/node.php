@@ -441,18 +441,16 @@ If an error occurs.
      * @see phpCR_Node::getProperties()
      */
     public function getProperties($namePattern = '') {
-        if ($namePattern) {
-            $jrnodes = $this->JRnode->getProperties($namePattern);
-        } else {
-            $jrnodes = $this->JRnode->getProperties();
+        try {
+            if ($namePattern) {
+                $jrnodes = $this->JRnode->getProperties($namePattern);
+            } else {
+                $jrnodes = $this->JRnode->getProperties();
+            }
+        } catch (JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
         }
-        $nodes = array();
-        while ($jrnodes->hasNext() && $jrnode = $jrnodes->next()) {
-            $nodes[] = $this->getPropertyFromList($jrnode);
-
-        }
-        return $nodes;
-
+        return new jr_cr_propertyiterator($jrnodes, $this->session);
     }
 
     /**
