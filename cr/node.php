@@ -523,8 +523,8 @@ If an error occurs
      * @see phpCR_Node::getReferences()
      */
     public function getReferences() {
-
-    //TODO - Insert your code here
+        $iterator = $this->JRnode->getReferences();
+        return new jr_cr_propertyIterator($iterator);
     }
 
     /**
@@ -628,11 +628,9 @@ If an unspecified error occurs.
     public function hasProperty($relPath) {
         try {
             return (bool) $this->JRnode->hasProperty($relPath);
-        } catch (Exception $e) {
-
-            return false;
+        } catch (JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
         }
-
     }
 
     /**
