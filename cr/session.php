@@ -198,8 +198,19 @@ If another error occurs
      * @see phpCR_Session::getNamespacePrefix()
      */
     public function getNamespacePrefix($uri) {
-
-    //TODO - Insert your code here
+        try {
+            return $this->JRsession->getNamespacePrefix($uri);
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'NamespaceException')) {
+                throw new phpCR_NamespaceException($e->getMessage());
+            } elseif (strstr($str, 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -210,8 +221,11 @@ If an error occurs
      * @see phpCR_Session::getNamespacePrefixes()
      */
     public function getNamespacePrefixes() {
-
-    //TODO - Insert your code here
+        try {
+            return $this->JRsession->getNamespacePrefixes();
+        } catch(JavaException $e) {
+            throw new phpCR_RepositoryException($e->getMessage());
+        }
     }
 
     /**
@@ -225,8 +239,19 @@ If another error occurs
      * @see phpCR_Session::getNamespaceURI()
      */
     public function getNamespaceURI($prefix) {
-
-    //TODO - Insert your code here
+        try {
+            return $this->JRsession->getNamespaceURI($prefix);
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'NamespaceException')) {
+                throw new phpCR_NamespaceException($e->getMessage());
+            } elseif (strstr($str, 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -603,8 +628,19 @@ If another error occurs.
      * @see phpCR_Session::setNamespacePrefix()
      */
     public function setNamespacePrefix($prefix, $uri) {
-
-    //TODO - Insert your code here
+        try {
+            $this->JRsession->setNamespacePrefix($prefix, $uri);
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'NamespaceException')) {
+                throw new phpCR_NamespaceException($e->getMessage());
+            } elseif (strstr($str, 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
     }
 
     public function addNodeToList($node) {
