@@ -18,6 +18,8 @@ class jr_cr_property implements phpCR_Property {
     protected $path = null;
     protected $type = null;
     protected $JRprop = null;
+    protected $value = null;
+    protected $values = null;
     
     /**
      * Enter description here...
@@ -88,7 +90,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getFloat()
      */
     public function getFloat() {
-        return (float)  $this->JRprop->getFloat();
+        return (float)  $this->JRprop->getValue()->getFloat();
     }
     
     /**
@@ -99,7 +101,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getInt()
      */
     public function getInt() {
-        return (int)  $this->JRprop->getInt();
+        return $this->getValue()->getInt();
     }
     
     /**
@@ -108,7 +110,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getLength()
      */
     public function getLength() {
-        return $this->JRprop->getLength();
+        return $this->JRprop->getValue()->getLength();
     }
     
     /**
@@ -119,7 +121,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getLong()
      */
     public function getLong() {
-        return (int) $this->JRprop->getLong();
+        return $this->getValue()->getLong();
     }
     
     /**
@@ -130,8 +132,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getStream()
      */
     public function getStream() {
-        return  $this->JRprop->getStream();
-        //TODO - Insert your code here
+        return  $this->getValue()->getStream();
     }
     
     /**
@@ -192,7 +193,7 @@ class jr_cr_property implements phpCR_Property {
                 return $data;
             }
             $data = (string) $this->JRprop->getString();
-            $this->session->cache->save($data,$cacheKey,array(md5($this->getPath())));
+            // $this->session->cache->save($data,$cacheKey,array(md5($this->getPath())));
             return $data;
         }
         return $result;
@@ -223,18 +224,20 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getValue()
      */
     public function getValue() {
-        try {
-            $value = $this->JRprop->getValue();
-        } catch (JavaException $e) {
-            $str = split("\n", $e->getMessage(), 2);
-            if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
-            } else {
-                throw new phpCR_RepositoryException($e->getMessage());
+        if (null === $this->value)  {
+            try {
+                $value = $this->JRprop->getValue();
+            } catch (JavaException $e) {
+                $str = split("\n", $e->getMessage(), 2);
+                if (false !== strpos($str[0], 'ValueFormatException')) {
+                    throw new phpCR_ValueFormatException($e->getMessage());
+                } else {
+                    throw new phpCR_RepositoryException($e->getMessage());
+                }
             }
+            $this->value = new jr_cr_value($value);
         }
-        
-        return new jr_cr_value($value);
+        return $this->value;
     }
     
     /**
@@ -246,22 +249,24 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getValues()
      */
     public function getValues() {
-        try {
-            $values = $this->JRprop->getValues();
-        } catch (JavaException $e) {
-            $str = split("\n", $e->getMessage(), 2);
-            if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
-            } else {
-                throw new phpCR_RepositoryException($e->getMessage());
+        if (null === $this->values) {
+            try {
+                $values = $this->JRprop->getValues();
+            } catch (JavaException $e) {
+                $str = split("\n", $e->getMessage(), 2);
+                if (false !== strpos($str[0], 'ValueFormatException')) {
+                    throw new phpCR_ValueFormatException($e->getMessage());
+                } else {
+                    throw new phpCR_RepositoryException($e->getMessage());
+                }
+            }
+            
+            $this->values = array();
+            foreach ($values as $value) {
+                array_push($this->values, new jr_cr_value($value));
             }
         }
-        
-        $ret = array();
-        foreach ($values as $value) {
-            array_push($ret, new jr_cr_value($value));
-        }
-        return $ret;
+        return $this->values;
     }
     
     /**

@@ -1,9 +1,32 @@
 <?php
 class jr_cr_value implements phpCR_Value {
     protected $JRvalue;
+    protected $isStream = null;
     
     public function __construct($JRvalue) {
         $this->JRvalue = $JRvalue;
+    }
+    
+    /**
+     * Checks if this is a stream or not. If it's not casted yet it will be set to the state.
+     * 
+     * @throws {@link IllegalStateException}
+     *    If {@link getStream()} has previously been called and it's a non stream Value.
+     *    If {@link get*()} has previously been called and it's a stream Value.
+     */
+    protected function checkState($stream) {
+        if (null === $this->isStream) {
+            $this->isStream = $stream;
+        } else {
+            if ($this->isStream !== $stream) {
+                if (true === $stream) {
+                    $msg = 'A non stream get method has already been called on this Value instance.';
+                } else {
+                    $msg = 'A getStream has already been called on this Value instance.';
+                }
+                throw new phpCR_IllegalStateException($msg);
+            }
+        }
     }
     
     /**
@@ -43,9 +66,40 @@ class jr_cr_value implements phpCR_Value {
      *    If another error occurs.
      */
     public function getStream() {
+        $this->checkState(true);
         //TODO: Insert code
     }
     
+    /**
+     * Returns a number of the value. Which format can be given as param.
+     */
+    public function getNumber($float = false) {
+        $this->checkState(false);
+        if (true === $this->isStream) {
+            throw new phpCR_IllegalStateException('getStream has previously been called on this Value instance.');
+        }
+        
+        try {
+            if (true === $float) {
+                $num = $this->JRvalue->getDouble();
+            } else {
+                $num = $this->JRvalue->getLong();
+            }
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos('ValueFormatException', $str[0])) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        
+        if (true === $float) {
+            return (float) $num;
+        } else {
+            return (int)  $num;
+        }
+    }
     
     /**
      * Returns the int representation of this value.
@@ -57,7 +111,7 @@ class jr_cr_value implements phpCR_Value {
      * @see getInt()
      */
     public function getLong() {
-        //TODO: Insert code
+        return $this->getInt();
     }
     
     /**
@@ -74,10 +128,9 @@ class jr_cr_value implements phpCR_Value {
      *    If another error occurs.
      */
     public function getInt() {
-        //TODO: Insert code
+        return $this->getNumber();
     }
     
-
     /**
      * Returns the float/double representation of this value.
      *
@@ -88,7 +141,7 @@ class jr_cr_value implements phpCR_Value {
      * @return float
      */
     public function getDouble() {
-        //TODO: Insert code
+        $this->getFloat();
     }
     
     /**
@@ -108,9 +161,8 @@ class jr_cr_value implements phpCR_Value {
      *    If another error occurs.
      */
     public function getFloat() {
-        //TODO: Insert code
+        return $this->getNumber(true);
     }
-    
     
     /**
      * Returns the timestamp string of this value.
@@ -137,6 +189,7 @@ class jr_cr_value implements phpCR_Value {
      *    If another error occurs.
      */
     public function getDate() {
+        $this->checkState(false);
         //TODO: Insert code
     }
     
@@ -155,6 +208,7 @@ class jr_cr_value implements phpCR_Value {
      *    If another error occurs.
      */
     public function getBoolean() {
+        $this->checkState(false);
         //TODO: Insert code
     }
     
@@ -180,6 +234,7 @@ class jr_cr_value implements phpCR_Value {
      * @return int
      */
     public function getType() {
+        $this->checkState(false);
         //TODO: Insert code
     }
 }
