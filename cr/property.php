@@ -154,6 +154,7 @@ A string representation of the value of this {@link Property}.
      * @see phpCR_Property::getString()
      */
     public function getString() {
+    //TODO: this should actually return something like $jrproperty->getValue->getString();
      $cacheKey = md5("prop::getString::".$this->getPath());
      if (!($this->session->cache && $result = $this->session->cache->load($cacheKey))) {
 
