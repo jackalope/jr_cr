@@ -240,9 +240,18 @@ If an error occurs.
 	 * @see phpCR_Property::getValue()
 	 */
 	public function getValue() {
-
-        return $this->JRprop->getValue();
-
+	    try {
+            $val = $this->JRprop->getValue();
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos($str[0], 'ValueFormatException')) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        
+        return new jr_cr_value($val);
 	}
 
 	/**
