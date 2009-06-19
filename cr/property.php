@@ -241,7 +241,7 @@ If an error occurs.
 	 */
 	public function getValue() {
 	    try {
-            $val = $this->JRprop->getValue();
+            $value = $this->JRprop->getValue();
         } catch (JavaException $e) {
             $str = split("\n", $e->getMessage(), 2);
             if (false !== strpos($str[0], 'ValueFormatException')) {
@@ -251,7 +251,7 @@ If an error occurs.
             }
         }
         
-        return new jr_cr_value($val);
+        return new jr_cr_value($value);
 	}
 
 	/**
@@ -263,9 +263,23 @@ If an error occurs.
 	 * @see phpCR_Property::getValues()
 	 */
 	public function getValues() {
-
-       return $this->JRprop->getValues();
-	}
+        try {
+            $values = $this->JRprop->getValues();
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos($str[0], 'ValueFormatException')) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        
+        $ret = array();
+        foreach ($values as $value) {
+            array_push($ret, new jr_cr_value($value));
+        }
+        return $ret;
+    }
 
 	/**
 	 *
