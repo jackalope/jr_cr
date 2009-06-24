@@ -23,8 +23,18 @@ If an error occurs
      * @see phpCR_Query::execute()
      */
     public function execute() {
-        return new jr_cr_queryresult($this->JRquery->execute(),$this->session);
-    //TODO - Insert your code here
+        try {
+            return new jr_cr_queryresult($this->JRquery->execute(),$this->session);
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            if (strstr($str[0], 'InvalidQueryException')) {
+                throw new phpCR_InvalidQueryException($e->getMessage());
+            } elseif (strstr($str[0], 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**

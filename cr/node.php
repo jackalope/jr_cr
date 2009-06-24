@@ -14,7 +14,7 @@ class jr_cr_node implements phpCR_Node {
      * @var jr_cr_session
      */
     protected $session = null;
-    protected $JRnode = null;
+    public $JRnode = null; //querymanager needs access to the java instance
 
     protected $new = false;
 
@@ -398,7 +398,7 @@ If an unexpected error occurs.
         } catch (JavaException $e) {
             throw new phpCR_RepositoryException($e->getMessage());
         }
-        
+
         return new jr_cr_nodeiterator($jrnodes, $this->session);
     }
 
