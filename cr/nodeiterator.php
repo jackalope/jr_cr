@@ -23,11 +23,16 @@ If iteration has no more {@link Node}s.
      * @see phpCR_NodeIterator::nextNode()
      */
     public function nextNode() {
-
         try {
             $n = $this->JRnodeiterator->nextNode();
-        } catch (Exception $e) {
-            return null;
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'NoSuchElementException')) {
+                throw new phpCR_NoSuchElementException($e->getMessage());
+            } else {
+                throw $e;
+            }
         }
         return new jr_cr_node($this->session,$n);
     }
@@ -39,8 +44,7 @@ If iteration has no more {@link Node}s.
     * @see phpCR_RangeIterator::getPosition()
 */
   public  function getPosition() {
-
-      //TODO - Insert your code here
+      return $this->JRnodeiterator->getPosition();
   }
 
   /**
@@ -63,8 +67,17 @@ If skipped past the last element in the iterator.
     * @see phpCR_RangeIterator::skip()
 */
   public  function skip($skipNum) {
-
-      //TODO - Insert your code here
+        try {
+            $this->JRnodeiterator->skip($skipNum);
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'NoSuchElementException')) {
+                throw new phpCR_NoSuchElementException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
   }
 
   /**
@@ -74,6 +87,7 @@ If skipped past the last element in the iterator.
   public  function current() {
 
       //TODO - Insert your code here
+      //FIXME: this is php only. java iterator can not do this
   }
 
   /**
@@ -83,16 +97,16 @@ If skipped past the last element in the iterator.
   public  function key() {
 
       //TODO - Insert your code here
+      //FIXME: this is php only. java iterator can not do this
   }
 
-  /**
-   *
-    * @see Iterator::next()
-*/
-  public  function next() {
-
-      //TODO - Insert your code here
-  }
+    /**
+     *
+     * @see Iterator::next()
+     */
+    public function next() {
+        return $this->nextNode();
+    }
 
   /**
    *
@@ -101,6 +115,7 @@ If skipped past the last element in the iterator.
   public  function rewind() {
 
       //TODO - Insert your code here
+      //FIXME: this is php only. java iterator can not do this
   }
 
   /**
@@ -110,6 +125,7 @@ If skipped past the last element in the iterator.
   public  function valid() {
 
       //TODO - Insert your code here
+      //FIXME: this is php only. java iterator can not do this
   }
 }
 
