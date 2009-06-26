@@ -949,6 +949,10 @@ If another error occurs.
             } else {
                 $jrprop = $this->JRnode->setProperty($name, $value);
             }
+            
+            if (null === $jrprop) {
+                throw new phpCR_RepositoryException("Couldn't create new property");
+            }
 
 
             if ($filename) {

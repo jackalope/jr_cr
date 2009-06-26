@@ -18,6 +18,7 @@ class jr_cr_property implements phpCR_Property {
     protected $path = null;
     protected $type = null;
     protected $JRprop = null;
+    protected $name = null;
     protected $value = null;
     protected $values = null;
     
@@ -342,7 +343,11 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Item::getName()
      */
     public function getName() {
-        return $this->JRprop->getName();
+        if (null === $this->name) {
+            $this->name = $this->JRprop->getName();
+        }
+        
+        return $this->name;
     }
     
     /**

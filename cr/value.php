@@ -87,7 +87,7 @@ class jr_cr_value implements phpCR_Value {
             }
         } catch (JavaException $e) {
             $str = split("\n", $e->getMessage(), 2);
-            if (false !== strpos('ValueFormatException', $str[0])) {
+            if (false !== strpos($str[0], 'ValueFormatException')) {
                 throw new phpCR_ValueFormatException($e->getMessage());
             } else {
                 throw new phpCR_RepositoryException($e->getMessage());
