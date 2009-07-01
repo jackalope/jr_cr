@@ -505,7 +505,7 @@ If another error occurs.
 
         $prop = $this->getPropertyFromList($jrnode);
         if ($prop instanceof jr_cr_property) {
-            return $prop;
+            return clone($prop);
         }
         throw new phpCR_PathNotFoundException($relPath);
 
