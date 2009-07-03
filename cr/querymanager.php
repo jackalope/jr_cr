@@ -15,8 +15,6 @@ class jr_cr_querymanager implements phpCR_QueryManager {
 	 *
 	 */
 	function __construct($workspace, $jrquerymanager) {
-
-
 	   $this->workspace = $workspace;
 	   $this->JRquerymanager = $jrquerymanager;
 	}
@@ -52,8 +50,19 @@ If another error occurs
 	 * @see phpCR_QueryManager::getQuery()
 	 */
 	public function getQuery(phpCR_Node $node) {
-
-	//TODO - Insert your code here
+        try {
+            $r = new jr_cr_query($this->JRquerymanager->getQuery($node->JRnode),
+                                   $this->workspace->getSession());
+        } catch(JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            if (strstr($str[0], 'InvalidQueryException')) {
+                throw new phpCR_InvalidQueryException($e->getMessage());
+            } elseif (strstr($str[0], 'RepositoryException')) {
+                throw new phpCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
 	}
 
 	/**

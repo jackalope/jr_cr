@@ -26,35 +26,32 @@
  * @package phpContentRepository
  * @package Version
  */
-class jr_cr_versioniterator {
-    protected $JRversioniterator = null;
+class jr_cr_versioniterator extends jr_cr_rangeiterator implements phpCR_VersionIterator {
     protected $session = null;
 
     public function __construct($JRversioniterator, $session) {
-        $this->JRversioniterator = $JRversioniterator;
+        parent::__construct($JRversioniterator);
         $this->session = $session;
 
     }
+
+    protected function createElement($v) {
+        return new jr_cr_version($v, $this->session);
+    }
+
     /**
      * Returns the next {@link Version} in the iteration.
      *
-     * @return object
-     *	A {@link Version} object
+     * @return object A {@link Version} object
      *
-     * @throws {@link NoSuchElementException}
-     *   If iteration has no more {@link Version}s.
+     * @throws {@link NoSuchElementException} If iteration has no more {@link Version}s.
      */
     public function nextVersion() {
-        try {
-        if ($this->JRversioniterator) {
-            $next = $this->JRversioniterator->nextVersion();
-
-            if ($next) {
-                return new jr_cr_version($next, $this->session);
-            }
-        }
-        } catch (Exception $e) {
-            return null;
+        $this->next();
+        if ($this->valid()) {
+            return $this->current();
+        } else {
+            throw new phpCR_NoSuchElementException('nextVersion called after end of iterator');
         }
     }
 }

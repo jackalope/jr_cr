@@ -24,37 +24,28 @@
  * @package phpContentRepository
  * @package NodeTypes
  */
-class jr_cr_nodetypeiterator { // implements phpCR_NodeTypeIterator {
-
-    protected $JRnodetypeiterator = null;
+class jr_cr_nodetypeiterator extends jr_cr_rangeiterator implements phpCR_NodeTypeIterator {
 
     public function __construct($JRnodetypeiterator) {
-        $this->JRnodetypeiterator = $JRnodetypeiterator;
+        parent::__construct($JRnodetypeiterator);
+    }
 
+    protected function createElement($t) {
+        return new jr_cr_nodetype($t);
     }
 
     /**
      * Returns the next {@link NodeType} in the iteration.
      *
-     * @return object
-     *   A {@link NodeType} object.
-     * @throws {@link NoSuchElementException}
-     *   If iteration has no more {@link NodeType}s.
+     * @return object A {@link NodeType} object.
+     * @throws {@link NoSuchElementException} If iteration has no more {@link NodeType}s.
      */
     public function nextNodeType() {
-
-        try {
-            if ($this->JRnodetypeiterator) {
-                $next = $this->JRnodetypeiterator->nextNodeType();
-
-                if ($next) {
-                    return new jr_cr_nodetype($next);
-                }
-            }
-        } catch (Exception $e) {
-            return null;
+        $this->next();
+        if ($this->valid()) {
+            return $this->current();
+        } else {
+            throw new phpCR_NoSuchElementException('nextNodeType called after end of iterator');
         }
     }
 }
-
-?>

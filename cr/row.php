@@ -26,7 +26,7 @@ If another error occurs
      * @see phpCR_Row::getValue()
      */
     public function getValue($propertyName) {
-        return $this->JRrow->getValue($propertyName);
+        return new jr_cr_value($this->JRrow->getValue($propertyName));
     }
 
     /**
@@ -37,6 +37,9 @@ If an error occurs
      * @see phpCR_Row::getValues()
      */
     public function getValues() {
-         return $this->JRrow->getValues();
+        $ret = array();
+        $jarr = $this->JRrow->getValues();
+        foreach($jarr as $key => $jval) $ret[$key] = new jr_cr_value($jval);
+        return $ret;
     }
 }

@@ -37,7 +37,7 @@ If an error occurs.
      * @see phpCR_QueryResult::getNodes()
      */
     public function getNodes() {
-            return new jr_cr_nodeiterator($this->JRqueryresult->getNodes(),$session);
+            return new jr_cr_nodeiterator($this->JRqueryresult->getNodes(),$this->session);
     //TODO - Insert your code here
     }
 
@@ -50,7 +50,7 @@ If an error occurs.
      * @see phpCR_QueryResult::getRows()
      */
     public function getRows() {
-return new jr_cr_rowiterator($this->JRqueryresult->getRows(),$session);
+return new jr_cr_rowiterator($this->JRqueryresult->getRows(),$this->session);
     //TODO - Insert your code here
     }
 }
