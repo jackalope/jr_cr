@@ -55,8 +55,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getDate()
      */
     public function getDate() {
-        return  date_create($this->getString());
-        //TODO - Insert your code here
+        return $this->getValue()->getDate();
     }
     
     /**

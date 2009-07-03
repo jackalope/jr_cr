@@ -186,9 +186,24 @@ class jr_cr_value implements phpCR_Value {
      */
     public function getDate() {
         $this->checkState(false);
-        //TODO: Insert code
+        try {
+            $date = $this->JRvalue->getDate();
+            $date = date_create($date->getTime()->toString());
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos($str[0], 'ValueFormatException')) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        
+        if (! $date instanceOf DateTime) {
+            throw new phpCR_ValueFormatException('Could not get Date');
+        }
+        
+        return $date;
     }
-    
     
     /**
      * Returns the boolean representation of this value.
