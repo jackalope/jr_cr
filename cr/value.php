@@ -78,7 +78,6 @@ class jr_cr_value implements phpCR_Value {
         try {
             if (true === $float) {
                 $num = $this->JRvalue->getDouble();
-                var_dump($num);
             } else {
                 $num = $this->JRvalue->getLong();
             }
