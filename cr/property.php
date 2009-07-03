@@ -80,7 +80,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getDouble()
      */
     public function getDouble() {
-        return (float)   $this->JRprop->getDouble();
+        return $this->getValue()->getDouble();
     }
     
     /**
@@ -91,7 +91,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getFloat()
      */
     public function getFloat() {
-        return (float)  $this->JRprop->getValue()->getFloat();
+        return $this->getValue()->getFloat();
     }
     
     /**

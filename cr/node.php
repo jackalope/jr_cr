@@ -452,7 +452,7 @@ class jr_cr_node implements phpCR_Node {
         } catch (JavaException $e) {
             throw new phpCR_RepositoryException($e->getMessage());
         }
-        return new jr_cr_propertyiterator($jrproperties);
+        return new jr_cr_propertyiterator($jrproperties, $this->JRnode);
     }
     
     /**
@@ -503,7 +503,7 @@ class jr_cr_node implements phpCR_Node {
      */
     public function getReferences() {
         $iterator = $this->JRnode->getReferences();
-        return new jr_cr_propertyIterator($iterator);
+        return new jr_cr_propertyIterator($iterator, $this->JRnode);
     }
     
     /**

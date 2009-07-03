@@ -6,16 +6,17 @@
  * @package phpContentRepository
  */
 class jr_cr_propertyiterator extends jr_cr_rangeiterator implements phpCR_PropertyIterator{
-
-
-    function __construct($JRpropertyiterator) {
+    protected $parentNode = null;
+    
+    function __construct($JRpropertyiterator, $parentNode) {
+        $this->parentNode = $parentNode;
         parent::__construct($JRpropertyiterator);
     }
-
-    protected function createElement($p) {
-        return new jr_cr_property($p);
+    
+    protected function createElement($property) {
+        return new jr_cr_property($this->parentNode, $property);
     }
-
+    
     /**
      * Returns the next {@link Property} in the iteration.
      *
