@@ -905,9 +905,6 @@ class jr_cr_node implements phpCR_Node {
                 }
                 $value = $val;
                 break;
-            
-            default :
-                $type = null;
             }
             if (! is_object($value) && $type) {
                 $jrprop = $this->JRnode->setProperty($name, $value, $type);

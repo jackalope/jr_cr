@@ -129,6 +129,25 @@ class jr_cr_property implements phpCR_Property {
     
     /**
      *
+     * @return array
+     * @see phpCR_Property::getLengths()
+     */
+    public function getLengths() {
+        try {
+            $lengths = $this->JRprop->getLengths();
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos($str[0], 'ValueFormatException')) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        return $lengths;
+    }
+    
+    /**
+     *
      * @see Value::getLong()
      * @return int
      * An integer representation of the value of this {@link Property}.
