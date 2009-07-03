@@ -47,6 +47,10 @@ class jr_cr_property implements phpCR_Property {
         return $this->getValue()->getBoolean();
     }
     
+    public function getNode() {
+        return $this->parentNode;
+    }
+    
     /**
      *
      * @see Value, Value::getDate()
