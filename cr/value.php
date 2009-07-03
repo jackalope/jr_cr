@@ -75,10 +75,6 @@ class jr_cr_value implements phpCR_Value {
      */
     public function getNumber($float = false) {
         $this->checkState(false);
-        if (true === $this->isStream) {
-            throw new phpCR_IllegalStateException('getStream has previously been called on this Value instance.');
-        }
-        
         try {
             if (true === $float) {
                 $num = $this->JRvalue->getDouble();
