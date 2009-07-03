@@ -44,7 +44,7 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getBoolean()
      */
     public function getBoolean() {
-        return (bool) $this->JRprop->getBoolean();
+        return $this->getValue()->getBoolean();
     }
     
     /**

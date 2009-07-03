@@ -82,12 +82,7 @@ class jr_cr_value implements phpCR_Value {
                 $num = $this->JRvalue->getLong();
             }
         } catch (JavaException $e) {
-            $str = split("\n", $e->getMessage(), 2);
-            if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
-            } else {
-                throw new phpCR_RepositoryException($e->getMessage());
-            }
+            $this->throwExceptionFromJava($e);
         }
         
         if (true === $float) {
@@ -190,12 +185,7 @@ class jr_cr_value implements phpCR_Value {
             $date = $this->JRvalue->getDate();
             $date = date_create($date->getTime()->toString());
         } catch (JavaException $e) {
-            $str = split("\n", $e->getMessage(), 2);
-            if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
-            } else {
-                throw new phpCR_RepositoryException($e->getMessage());
-            }
+            $this->throwExceptionFromJava($e);
         }
         
         if (! $date instanceOf DateTime) {
@@ -220,9 +210,14 @@ class jr_cr_value implements phpCR_Value {
      */
     public function getBoolean() {
         $this->checkState(false);
-        //TODO: Insert code
+        try {
+            $bool = $this->JRvalue->getBoolean();
+        } catch (JavaException $e) {
+            $this->throwExceptionFromJava($e);
+        }
+        
+        return $bool;
     }
-    
     
     /**
      * Returns the type of this Value.
@@ -247,6 +242,15 @@ class jr_cr_value implements phpCR_Value {
     public function getType() {
         $this->checkState(false);
         //TODO: Insert code
+    }
+    
+    protected function throwExceptionFromJava($e) {
+        $str = split("\n", $e->getMessage(), 2);
+        if (false !== strpos($str[0], 'ValueFormatException')) {
+            throw new phpCR_ValueFormatException($e->getMessage());
+        } else {
+            throw new phpCR_RepositoryException($e->getMessage());
+        }
     }
 }
 
