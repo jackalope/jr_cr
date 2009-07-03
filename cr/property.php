@@ -114,7 +114,17 @@ class jr_cr_property implements phpCR_Property {
      * @see phpCR_Property::getLength()
      */
     public function getLength() {
-        return $this->JRprop->getValue()->getLength();
+        try {
+            $length = $this->JRprop->getLength();
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 2);
+            if (false !== strpos($str[0], 'ValueFormatException')) {
+                throw new phpCR_ValueFormatException($e->getMessage());
+            } else {
+                throw new phpCR_RepositoryException($e->getMessage());
+            }
+        }
+        return $length;
     }
     
     /**
