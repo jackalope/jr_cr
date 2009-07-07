@@ -2,14 +2,14 @@
 class jr_cr_value implements phpCR_Value {
     protected $JRvalue;
     protected $isStream = null;
-    
+
     public function __construct($JRvalue) {
         $this->JRvalue = $JRvalue;
     }
-    
+
     /**
      * Checks if this is a stream or not. If it's not casted yet it will be set to the state.
-     * 
+     *
      * @throws {@link IllegalStateException}
      *    If {@link getStream()} has previously been called and it's a non stream Value.
      *    If {@link get*()} has previously been called and it's a stream Value.
@@ -28,7 +28,7 @@ class jr_cr_value implements phpCR_Value {
             }
         }
     }
-    
+
     /**
      * Returns a string representation of this value.
      *
@@ -37,16 +37,21 @@ class jr_cr_value implements phpCR_Value {
      * @throws {@link ValueFormatException}
      *    If conversion to a string is not possible.
      * @throws {@link IllegalStateException}
-     *    If {@link getStream()} has previously been called on this 
+     *    If {@link getStream()} has previously been called on this
      *    {@link Value} instance.
      * @throws {@link RepositoryException}
      *    If another error occurs.
      */
     public function getString() {
-        //TODO: Insert code
+        $this->checkState(false);
+        try {
+            return $this->JRvalue->getString();
+        } catch(JavaException $e) {
+            $this->throwExceptionFromJava($e);
+        }
     }
-    
-    
+
+
     /**
      * Returns the stream resource of this value.
      *
@@ -69,7 +74,7 @@ class jr_cr_value implements phpCR_Value {
         $this->checkState(true);
         //TODO: Insert code
     }
-    
+
     /**
      * Returns a number of the value. Which format can be given as param.
      */
@@ -84,14 +89,14 @@ class jr_cr_value implements phpCR_Value {
         } catch (JavaException $e) {
             $this->throwExceptionFromJava($e);
         }
-        
+
         if (true === $float) {
             return (float) $num;
         } else {
             return (int)  $num;
         }
     }
-    
+
     /**
      * Returns the int representation of this value.
      *
@@ -104,7 +109,7 @@ class jr_cr_value implements phpCR_Value {
     public function getLong() {
         return $this->getInt();
     }
-    
+
     /**
      * Returns the int representation of this value.
      *
@@ -113,7 +118,7 @@ class jr_cr_value implements phpCR_Value {
      * @throws {@link ValueFormatException}
      *    If conversion to a int is not possible.
      * @throws {@link IllegalStateException}
-     *    If {@link getStream()} has previously been called on this 
+     *    If {@link getStream()} has previously been called on this
      *    {@link Value} instance.
      * @throws {@link RepositoryException}
      *    If another error occurs.
@@ -121,7 +126,7 @@ class jr_cr_value implements phpCR_Value {
     public function getInt() {
         return $this->getNumber();
     }
-    
+
     /**
      * Returns the float/double representation of this value.
      *
@@ -134,7 +139,7 @@ class jr_cr_value implements phpCR_Value {
     public function getDouble() {
         return $this->getFloat();
     }
-    
+
     /**
      * Returns the float/double representation of this value.
      *
@@ -146,7 +151,7 @@ class jr_cr_value implements phpCR_Value {
      * @throws {@link ValueFormatException}
      *    If conversion to a float is not possible.
      * @throws {@link IllegalStateException}
-     *    If {@link getStream()} has previously been called on this 
+     *    If {@link getStream()} has previously been called on this
      *    {@link Value} instance.
      * @throws {@link RepositoryException}
      *    If another error occurs.
@@ -154,11 +159,11 @@ class jr_cr_value implements phpCR_Value {
     public function getFloat() {
         return $this->getNumber(true);
     }
-    
+
     /**
      * Returns the timestamp string of this value.
      *
-     * <b>PHP Note</b>: PHP does not have a default Calendar object.  This 
+     * <b>PHP Note</b>: PHP does not have a default Calendar object.  This
      * method has been adjusted to return a string representing a valid
      * timestamp.
      *
@@ -174,7 +179,7 @@ class jr_cr_value implements phpCR_Value {
      * @throws {@link ValueFormatException}
      *    If conversion to a timestamp/date is not possible.
      * @throws {@link IllegalStateException}
-     *    If {@link getStream()} has previously been called on this 
+     *    If {@link getStream()} has previously been called on this
      *    {@link Value} instance.
      * @throws {@link RepositoryException}
      *    If another error occurs.
@@ -187,14 +192,14 @@ class jr_cr_value implements phpCR_Value {
         } catch (JavaException $e) {
             $this->throwExceptionFromJava($e);
         }
-        
+
         if (! $date instanceOf DateTime) {
             throw new phpCR_ValueFormatException('Could not get Date');
         }
-        
+
         return $date;
     }
-    
+
     /**
      * Returns the boolean representation of this value.
      *
@@ -203,7 +208,7 @@ class jr_cr_value implements phpCR_Value {
      * @throws {@link ValueFormatException}
      *    If conversion to a boolean is not possible.
      * @throws {@link IllegalStateException}
-     *    If {@link getStream()} has previously been called on this 
+     *    If {@link getStream()} has previously been called on this
      *    {@link Value} instance.
      * @throws {@link RepositoryException}
      *    If another error occurs.
@@ -215,10 +220,10 @@ class jr_cr_value implements phpCR_Value {
         } catch (JavaException $e) {
             $this->throwExceptionFromJava($e);
         }
-        
+
         return $bool;
     }
-    
+
     /**
      * Returns the type of this Value.
      * One of:
@@ -243,7 +248,7 @@ class jr_cr_value implements phpCR_Value {
         $this->checkState(false);
         //TODO: Insert code
     }
-    
+
     protected function throwExceptionFromJava($e) {
         $str = split("\n", $e->getMessage(), 2);
         if (false !== strpos($str[0], 'ValueFormatException')) {
