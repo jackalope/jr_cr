@@ -1,7 +1,7 @@
 <?php
 
 
-class jr_cr_query implements phpCR_Query {
+class jr_cr_query implements PHPCR_QueryInterface {
 
 
     protected $JRquery = null;
@@ -20,7 +20,7 @@ class jr_cr_query implements phpCR_Query {
 A {@link QueryResult} object
      * @throws {@link RepositoryException}
 If an error occurs
-     * @see phpCR_Query::execute()
+     * @see PHPCR_Query::execute()
      */
     public function execute() {
         try {
@@ -28,9 +28,9 @@ If an error occurs
         } catch(JavaException $e) {
             $str = split("\n", $e->getMessage(), 1);
             if (strstr($str[0], 'InvalidQueryException')) {
-                throw new phpCR_InvalidQueryException($e->getMessage());
+                throw new PHPCR_InvalidQueryException($e->getMessage());
             } elseif (strstr($str[0], 'RepositoryException')) {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             } else {
                 throw $e;
             }
@@ -41,7 +41,7 @@ If an error occurs
      *
      * @see QueryLanguage
      * @return int
-     * @see phpCR_Query::getLanguage()
+     * @see PHPCR_Query::getLanguage()
      */
     public function getLanguage() {
 
@@ -55,7 +55,7 @@ If an error occurs
     /**
      *
      * @return string
-     * @see phpCR_Query::getStatement()
+     * @see PHPCR_Query::getStatement()
      */
     public function getStatement() {
 
@@ -70,7 +70,7 @@ Path of the {@link Node} representing this query.
 If this query is not a stored query.
      * @throws {@link RepositoryException}
 If another error occurs.
-     * @see phpCR_Query::getStoredQueryPath()
+     * @see PHPCR_Query::getStoredQueryPath()
      */
     public function getStoredQueryPath() {
 
@@ -111,7 +111,7 @@ In a level 1 implementation.
      * @throws {@link RepositoryException}
 If another error occurs or if the <i>$relPath</i> provided has
 an index on its final element.
-     * @see phpCR_Query::storeAsNode()
+     * @see PHPCR_Query::storeAsNode()
      */
     public function storeAsNode($absPath) {
 

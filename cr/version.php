@@ -2,7 +2,7 @@
 // $Id: Version.interface.php 399 2005-08-13 19:38:08Z tswicegood $
 /**
  * This file contains {@link Version} which is part of the PHP Content
- * Repository (phpCR), a derivative of the Java Content Repository JSR-170, and
+ * Repository (PHPCR), a derivative of the Java Content Repository JSR-170, and
  * is licensed under the Apache License, Version 2.0.
  *
  * This file is based on the code created for
@@ -26,8 +26,7 @@
  * @package phpContentRepository
  * @package Version
  */
-class jr_cr_version extends jr_cr_node implements phpCR_Version
-{
+class jr_cr_version extends jr_cr_node implements PHPCR_VersionInterface {
 protected $JRversion = null;
 protected $session = null;
 
@@ -65,7 +64,7 @@ protected $session = null;
     * of its distribution, this can be returned as a string.  It must be
     * formatted according to the
     * {@link http://www.w3.org/TR/NOTE-datetime ISO8601 specifications}.  At
-    * some future point, phpCR may offer a simple Calendar object to encapsulate
+    * some future point, PHPCR may offer a simple Calendar object to encapsulate
     * this return on.
     *
     * If you choose to implement your own Calendar object, the object should
@@ -188,7 +187,7 @@ protected $session = null;
     * @throws {@link RepositoryException}
     *   If any other error occurs.
     */
-    public function addSuccessor(phpCR_Version $v) {}
+    public function addSuccessor(PHPCR_Version $v) {}
 
 
    /**
@@ -207,6 +206,6 @@ protected $session = null;
     *   {@link Node}.
     * @throws RepositoryException if an error occurs.
     */
-    public function removeSuccessor(phpCR_Version $v) {}
+    public function removeSuccessor(PHPCR_Version $v) {}
 }
 

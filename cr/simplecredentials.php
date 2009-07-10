@@ -1,6 +1,6 @@
 <?php
 
-class jr_cr_simplecredentials implements phpCR_SimpleCredentials {
+class jr_cr_simplecredentials implements PHPCR_CredentialsInterface {
 
     protected $JRcredentials;
     protected $user;

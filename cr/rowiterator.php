@@ -1,7 +1,7 @@
 <?php
 
 
-class jr_cr_rowiterator extends jr_cr_rangeiterator implements phpCR_RowIterator {
+class jr_cr_rowiterator extends jr_cr_rangeiterator implements PHPCR_RowIteratorInterface {
 
     protected $session = null;
 
@@ -18,14 +18,14 @@ class jr_cr_rowiterator extends jr_cr_rangeiterator implements phpCR_RowIterator
      *
      * @return object A {@link Row} object
      * @throws {@link NoSuchElementException} If iteration has no more {@link Row}s.
-     * @see phpCR_RowIterator::nextRow()
+     * @see PHPCR_RowIterator::nextRow()
      */
     public function nextRow() {
         $this->next();
         if ($this->valid()) {
             return $this->current();
         } else {
-            throw new phpCR_NoSuchElementException('nextRow called after end of iterator');
+            throw new PHPCR_NoSuchElementException('nextRow called after end of iterator');
         }
     }
 }

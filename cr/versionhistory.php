@@ -2,7 +2,7 @@
 // $Id: VersionHistory.interface.php 399 2005-08-13 19:38:08Z tswicegood $
 /**
  * This file contains {@link VersionHistory} which is part of the PHP Content
- * Repository (phpCR), a derivative of the Java Content Repository JSR-170, and
+ * Repository (PHPCR), a derivative of the Java Content Repository JSR-170, and
  * is licensed under the Apache License, Version 2.0.
  *
  * This file is based on the code created for
@@ -25,7 +25,7 @@
  * @package phpContentRepository
  * @package Version
  */
-class jr_cr_versionhistory extends jr_cr_node implements phpCR_VersionHistory {
+class jr_cr_versionhistory extends jr_cr_node implements PHPCR_VersionHistoryInterface {
 
     protected $JRversionhistory = null;
     protected $session = null;

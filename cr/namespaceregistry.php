@@ -1,13 +1,13 @@
 <?php
 /**
  * {@link NamespaceRegistry} represents the global persistent namespace
- * registry of the phpCR Repository.
+ * registry of the PHPCR Repository.
  *
  * @see Workspace::getNamespaceRegistry()
  *
  * @package phpContentRepository
  */
-class jr_cr_namespaceregistry implements phpCR_NamespaceRegistry {
+class jr_cr_namespaceregistry implements PHPCR_NamespaceRegistryInterface {
     protected $JRnamespaceregistry;
 
     public function __construct($NamespaceRegistry) {
@@ -134,7 +134,7 @@ class jr_cr_namespaceregistry implements phpCR_NamespaceRegistry {
         try {
             return $this->JRnamespaceregistry->getPrefixes();
         } catch(JavaException $e) {
-            throw new phpCR_RepositoryException($e->getMessage());
+            throw new PHPCR_RepositoryException($e->getMessage());
         }
     }
 
@@ -150,7 +150,7 @@ class jr_cr_namespaceregistry implements phpCR_NamespaceRegistry {
         try {
             return $this->JRnamespaceregistry->getURIs();
         } catch(JavaException $e) {
-            throw new phpCR_RepositoryException($e->getMessage());
+            throw new PHPCR_RepositoryException($e->getMessage());
         }
     }
 
@@ -172,9 +172,9 @@ class jr_cr_namespaceregistry implements phpCR_NamespaceRegistry {
             $str = split("\n", $e->getMessage(), 1);
             $str = $str[0];
             if (strstr($str, 'NamespaceException')) {
-                throw new phpCR_NamespaceException($e->getMessage());
+                throw new PHPCR_NamespaceException($e->getMessage());
             } elseif (strstr($str, 'RepositoryException')) {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             } else {
                 throw $e;
             }
@@ -199,9 +199,9 @@ class jr_cr_namespaceregistry implements phpCR_NamespaceRegistry {
             $str = split("\n", $e->getMessage(), 1);
             $str = $str[0];
             if (strstr($str, 'NamespaceException')) {
-                throw new phpCR_NamespaceException($e->getMessage());
+                throw new PHPCR_NamespaceException($e->getMessage());
             } elseif (strstr($str, 'RepositoryException')) {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             } else {
                 throw $e;
             }

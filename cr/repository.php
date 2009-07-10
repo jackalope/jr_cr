@@ -1,6 +1,6 @@
 <?php
 
-class jr_cr_repository implements phpCR_Repository {
+class jr_cr_repository implements PHPCR_RepositoryInterface {
 
 	protected $JRrepository = null;
     protected $storage = null;
@@ -40,7 +40,7 @@ class jr_cr_repository implements phpCR_Repository {
 	 *    A descriptor string or null if unavailable
 	 */
 	public function getDescriptor($key) {
-	    $key = preg_replace('/^phpcr\./', 'jcr.', $key);
+	    $key = preg_replace('/^PHPCR\./', 'jcr.', $key);
         return $this->JRrepository->getDescriptor($key);
 	}
 
@@ -58,7 +58,7 @@ class jr_cr_repository implements phpCR_Repository {
 	public function getDescriptorKeys() {
 	    $keys = $this->JRrepository->getDescriptorKeys();
 	    for ($x=0, $count = count($keys); $x < $count ;$x++) {
-            $keys[$x] = preg_replace('/^jcr\./', 'phpcr.', $keys[$x]);
+            $keys[$x] = preg_replace('/^jcr\./', 'PHPCR.', $keys[$x]);
 	    }
 	    return $keys;
 	}
@@ -117,15 +117,66 @@ class jr_cr_repository implements phpCR_Repository {
             $str = split("\n", $e->getMessage(), 1);
             $str = $str[0];
             if (strstr($str, 'LoginException')) {
-                throw new phpCR_LoginException($e->getMessage());
+                throw new PHPCR_LoginException($e->getMessage());
             } elseif (strstr($str, 'NoSuchWorkspaceException')) {
-                throw new phpCR_NoSuchWorkspaceException($e->getMessage());
+                throw new PHPCR_NoSuchWorkspaceException($e->getMessage());
             } elseif (strstr($str, 'RepositoryException')) {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             } else {
                 throw $e;
             }
         }
+    }
+    
+    /**
+     * Returns TRUE if $key is a standard descriptor
+     * defined by the string constants in this interface and FALSE if it is
+     * either a valid implementation-specific key or not a valid key.
+     *
+     * @param string $key a descriptor key.
+     * @return boolan whether $key is a standard descriptor.
+     */
+    public function isStandardDescriptor($key) {
+        //TODO: Add Code Here
+    }
+
+    /**
+     * Returns TRUE if $key is a valid single-value descriptor;
+     * otherwise returns FALSE.
+     *
+     * @param string $key a descriptor key.
+     * @return boolean whether the specified descriptor is multi-valued.
+     */
+    public function isSingleValueDescriptor($key) {
+        //TODO: Add Code Here
+    }
+
+
+    /**
+     * The value of a single-value descriptor is found by
+     * passing the key for that descriptor to this method.
+     * If $key is the key of a multi-value descriptor
+     * or not a valid key this method returns NULL.
+     *
+     * @param string $key a descriptor key.
+     * @return PHPCR_ValueInterface The value of the indicated descriptor
+     */
+    public function getDescriptorValue($key) {
+        //TODO: Add Code Here
+    }
+
+    /**
+     * The value array of a multi-value descriptor is found by
+     * passing the key for that descriptor to this method.
+     * If $key is the key of a single-value descriptor
+     * then this method returns that value as an array of size one.
+     * If $key is not a valid key this method returns NULL.
+     *
+     * @param string $key a descriptor key.
+     * @return array of PHPCR_ValueInterface the value array for the indicated descriptor
+     */
+    public function getDescriptorValues($key) {
+        //TODO: Add Code Here
     }
 
 }

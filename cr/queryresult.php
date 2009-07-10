@@ -1,7 +1,7 @@
 <?php
 
 
-class jr_cr_queryresult implements phpCR_QueryResult {
+class jr_cr_queryresult implements PHPCR_QueryResultInterface {
 
     /**
      *
@@ -21,7 +21,7 @@ class jr_cr_queryresult implements phpCR_QueryResult {
      * @return array
      * @throws {@link RepositoryException}
 If an error occurs.
-     * @see phpCR_QueryResult::getColumnNames()
+     * @see PHPCR_QueryResult::getColumnNames()
      */
     public function getColumnNames() {
 
@@ -34,7 +34,7 @@ If an error occurs.
 A {@link NodeIterator} object
      * @throws {@link RepositoryException}
 If an error occurs.
-     * @see phpCR_QueryResult::getNodes()
+     * @see PHPCR_QueryResult::getNodes()
      */
     public function getNodes() {
             return new jr_cr_nodeiterator($this->JRqueryresult->getNodes(),$this->session);
@@ -47,7 +47,7 @@ If an error occurs.
 A {@link RowIterator} object
      * @throws {@link RepositoryException}
 If an error occurs.
-     * @see phpCR_QueryResult::getRows()
+     * @see PHPCR_QueryResult::getRows()
      */
     public function getRows() {
 return new jr_cr_rowiterator($this->JRqueryresult->getRows(),$this->session);

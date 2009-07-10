@@ -2,7 +2,7 @@
 // $Id: VersionIterator.interface.php 399 2005-08-13 19:38:08Z tswicegood $
 /**
  * This file contains {@link VersionIterator} which is part of the PHP Content
- * Repository (phpCR), a derivative of the Java Content Repository JSR-170, and
+ * Repository (PHPCR), a derivative of the Java Content Repository JSR-170, and
  * is licensed under the Apache License, Version 2.0.
  *
  * This file is based on the code created for
@@ -26,7 +26,7 @@
  * @package phpContentRepository
  * @package Version
  */
-class jr_cr_versioniterator extends jr_cr_rangeiterator implements phpCR_VersionIterator {
+class jr_cr_versioniterator extends jr_cr_rangeiterator implements PHPCR_VersionIteratorInterface {
     protected $session = null;
 
     public function __construct($JRversioniterator, $session) {
@@ -51,7 +51,7 @@ class jr_cr_versioniterator extends jr_cr_rangeiterator implements phpCR_Version
         if ($this->valid()) {
             return $this->current();
         } else {
-            throw new phpCR_NoSuchElementException('nextVersion called after end of iterator');
+            throw new PHPCR_NoSuchElementException('nextVersion called after end of iterator');
         }
     }
 }

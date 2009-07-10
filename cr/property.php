@@ -1,5 +1,5 @@
 <?php
-class jr_cr_property implements phpCR_Property {
+class jr_cr_property implements PHPCR_PropertyInterface {
     /**
      * Enter description here...
      *
@@ -41,7 +41,7 @@ class jr_cr_property implements phpCR_Property {
      * @see Value::getBoolean()
      * @return bool
      * A boolean representation of the value of this {@link Property}.
-     * @see phpCR_Property::getBoolean()
+     * @see PHPCR_Property::getBoolean()
      */
     public function getBoolean() {
         return $this->getValue()->getBoolean();
@@ -56,7 +56,7 @@ class jr_cr_property implements phpCR_Property {
      * @see Value, Value::getDate()
      * @return object
      * A date representation of the value of this {@link Property}.
-     * @see phpCR_Property::getDate()
+     * @see PHPCR_Property::getDate()
      */
     public function getDate() {
         return $this->getValue()->getDate();
@@ -69,7 +69,7 @@ class jr_cr_property implements phpCR_Property {
      * A {@link PropertyDef} object
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Property::getDefinition()
+     * @see PHPCR_Property::getDefinition()
      */
     public function getDefinition() {
         return    $this->JRprop->getDefinition();
@@ -80,7 +80,7 @@ class jr_cr_property implements phpCR_Property {
      *
      * @see getFloat(), Value::getDouble()
      * @return float
-     * @see phpCR_Property::getDouble()
+     * @see PHPCR_Property::getDouble()
      */
     public function getDouble() {
         return $this->getValue()->getDouble();
@@ -91,7 +91,7 @@ class jr_cr_property implements phpCR_Property {
      * @see Value, Value::getFloat(), getDouble()
      * @return float
      * A float representation of the value of this {@link Property}.
-     * @see phpCR_Property::getFloat()
+     * @see PHPCR_Property::getFloat()
      */
     public function getFloat() {
         return $this->getValue()->getFloat();
@@ -102,7 +102,7 @@ class jr_cr_property implements phpCR_Property {
      * @see Value::getLong()
      * @return int
      * An integer representation of the value of this {@link Property}.
-     * @see phpCR_Property::getInt()
+     * @see PHPCR_Property::getInt()
      */
     public function getInt() {
         return $this->getValue()->getInt();
@@ -111,7 +111,7 @@ class jr_cr_property implements phpCR_Property {
     /**
      *
      * @return int
-     * @see phpCR_Property::getLength()
+     * @see PHPCR_Property::getLength()
      */
     public function getLength() {
         try {
@@ -119,9 +119,9 @@ class jr_cr_property implements phpCR_Property {
         } catch (JavaException $e) {
             $str = split("\n", $e->getMessage(), 2);
             if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
+                throw new PHPCR_ValueFormatException($e->getMessage());
             } else {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             }
         }
         return $length;
@@ -130,7 +130,7 @@ class jr_cr_property implements phpCR_Property {
     /**
      *
      * @return array
-     * @see phpCR_Property::getLengths()
+     * @see PHPCR_Property::getLengths()
      */
     public function getLengths() {
         try {
@@ -138,9 +138,9 @@ class jr_cr_property implements phpCR_Property {
         } catch (JavaException $e) {
             $str = split("\n", $e->getMessage(), 2);
             if (false !== strpos($str[0], 'ValueFormatException')) {
-                throw new phpCR_ValueFormatException($e->getMessage());
+                throw new PHPCR_ValueFormatException($e->getMessage());
             } else {
-                throw new phpCR_RepositoryException($e->getMessage());
+                throw new PHPCR_RepositoryException($e->getMessage());
             }
         }
         return $lengths;
@@ -151,7 +151,7 @@ class jr_cr_property implements phpCR_Property {
      * @see Value::getLong()
      * @return int
      * An integer representation of the value of this {@link Property}.
-     * @see phpCR_Property::getLong()
+     * @see PHPCR_Property::getLong()
      */
     public function getLong() {
         return $this->getValue()->getLong();
@@ -159,27 +159,16 @@ class jr_cr_property implements phpCR_Property {
     
     /**
      *
-     * @see Value, Value::getStream()
-     * @return object|reference
-     * A stream representation of the value of this {@link Property}.
-     * @see phpCR_Property::getStream()
-     */
-    public function getStream() {
-        return  $this->getValue()->getStream();
-    }
-    
-    /**
-     *
      * @see Value
      * @return string
      * A string representation of the value of this {@link Property}.
-     * @see phpCR_Property::getString()
+     * @see PHPCR_Property::getString()
      */
     public function getString() {
         //TODO: this should actually return something like $jrproperty->getValue->getString();
         $cacheKey = md5("prop::getString::".$this->getPath());
         if (!($this->session->cache && $result = $this->session->cache->load($cacheKey))) {
-            if ($this->getType() == phpCR_PropertyType::BINARY) {
+            if ($this->getType() == PHPCR_PropertyType::BINARY) {
                 
                 /**
                  * the copyToFile() method is a patch for
@@ -237,7 +226,7 @@ class jr_cr_property implements phpCR_Property {
      * @return int
      * @throws {@link RepositoryException}
      * If an error occurs
-     * @see phpCR_Property::getType()
+     * @see PHPCR_Property::getType()
      */
     public function getType() {
         if (!$this->type) {
@@ -254,7 +243,7 @@ class jr_cr_property implements phpCR_Property {
      * If the property is multi-valued.
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Property::getValue()
+     * @see PHPCR_Property::getValue()
      */
     public function getValue() {
         if (null === $this->value)  {
@@ -263,9 +252,9 @@ class jr_cr_property implements phpCR_Property {
             } catch (JavaException $e) {
                 $str = split("\n", $e->getMessage(), 2);
                 if (false !== strpos($str[0], 'ValueFormatException')) {
-                    throw new phpCR_ValueFormatException($e->getMessage());
+                    throw new PHPCR_ValueFormatException($e->getMessage());
                 } else {
-                    throw new phpCR_RepositoryException($e->getMessage());
+                    throw new PHPCR_RepositoryException($e->getMessage());
                 }
             }
             $this->value = new jr_cr_value($value);
@@ -279,7 +268,7 @@ class jr_cr_property implements phpCR_Property {
      * An array of {@link Value}s.
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Property::getValues()
+     * @see PHPCR_Property::getValues()
      */
     public function getValues() {
         if (null === $this->values) {
@@ -288,9 +277,9 @@ class jr_cr_property implements phpCR_Property {
             } catch (JavaException $e) {
                 $str = split("\n", $e->getMessage(), 2);
                 if (false !== strpos($str[0], 'ValueFormatException')) {
-                    throw new phpCR_ValueFormatException($e->getMessage());
+                    throw new PHPCR_ValueFormatException($e->getMessage());
                 } else {
-                    throw new phpCR_RepositoryException($e->getMessage());
+                    throw new PHPCR_RepositoryException($e->getMessage());
                 }
             }
             
@@ -311,7 +300,7 @@ class jr_cr_property implements phpCR_Property {
      * type of this {@link Property}.
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Property::setValue()
+     * @see PHPCR_Property::setValue()
      */
     public function setValue($value) {
         $this->JRprop->setValue($value);
@@ -323,9 +312,9 @@ class jr_cr_property implements phpCR_Property {
      * A {@link ItemVisitor} object
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::accept()
+     * @see PHPCR_Item::accept()
      */
-    public function accept(phpCR_ItemVisitor $visitor) {
+    public function accept(PHPCR_ItemVisitorInterface $visitor) {
         //TODO - Insert your code here
     }
     
@@ -347,7 +336,7 @@ class jr_cr_property implements phpCR_Property {
      * complete the operation.
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Item::getAncestor()
+     * @see PHPCR_Item::getAncestor()
      */
     public function getAncestor($degree) {
         //TODO - Insert your code here
@@ -359,7 +348,7 @@ class jr_cr_property implements phpCR_Property {
      * The depth of this {@link Item} in the repository hierarchy.
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::getDepth()
+     * @see PHPCR_Item::getDepth()
      */
     public function getDepth() {
         //TODO - Insert your code here
@@ -372,7 +361,7 @@ class jr_cr_property implements phpCR_Property {
      * {@link Item} is the root {@link Node}.
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::getName()
+     * @see PHPCR_Item::getName()
      */
     public function getName() {
         if (null === $this->name) {
@@ -395,7 +384,7 @@ class jr_cr_property implements phpCR_Property {
      * complete the operation.
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Item::getParent()
+     * @see PHPCR_Item::getParent()
      */
     public function getParent() {
         return $this->parentNode;
@@ -407,7 +396,7 @@ class jr_cr_property implements phpCR_Property {
      * The path (or one of the paths) of this {@link Item}.
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::getPath()
+     * @see PHPCR_Item::getPath()
      */
     public function getPath() {
         if (!$this->path) {
@@ -422,7 +411,7 @@ class jr_cr_property implements phpCR_Property {
      * A {@link Session} object
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::getSession()
+     * @see PHPCR_Item::getSession()
      */
     public function getSession() {
         return $this->session;
@@ -431,7 +420,7 @@ class jr_cr_property implements phpCR_Property {
     /**
      *
      * @return boolean
-     * @see phpCR_Item::isModified()
+     * @see PHPCR_Item::isModified()
      */
     public function isModified() {
         return $this->modified;
@@ -444,7 +433,7 @@ class jr_cr_property implements phpCR_Property {
     /**
      *
      * @return boolean
-     * @see phpCR_Item::isNew()
+     * @see PHPCR_Item::isNew()
      */
     public function isNew() {
         return $this->new;
@@ -459,7 +448,7 @@ class jr_cr_property implements phpCR_Property {
      * @return bool
      * Returns TRUE if this {@link Item} is a {@link Node};
      * Returns FALSE if this {@link Item} is a {@link Property}.
-     * @see phpCR_Item::isNode()
+     * @see PHPCR_Item::isNode()
      */
     public function isNode() {
         return false;
@@ -472,9 +461,9 @@ class jr_cr_property implements phpCR_Property {
      * @return boolean
      * @throws {@link RepositoryException}
      * If an error occurs.
-     * @see phpCR_Item::isSame()
+     * @see PHPCR_Item::isSame()
      */
-    public function isSame(phpCR_Item $otherItem) {
+    public function isSame(PHPCR_ItemInterface $otherItem) {
         //TODO - Insert your code here
     }
     
@@ -486,7 +475,7 @@ class jr_cr_property implements phpCR_Property {
      * removed (either by this session or another).
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Item::refresh()
+     * @see PHPCR_Item::refresh()
      */
     public function refresh($keepChanges) {
         //TODO - Insert your code here
@@ -509,7 +498,7 @@ class jr_cr_property implements phpCR_Property {
      * this validation immediately instead of waiting until {@link save()}.
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Item::remove()
+     * @see PHPCR_Item::remove()
      */
     public function remove() {
         $this->JRprop->remove();
@@ -550,11 +539,67 @@ class jr_cr_property implements phpCR_Property {
      * unrecognized node type.
      * @throws {@link RepositoryException}
      * If another error occurs.
-     * @see phpCR_Item::save()
+     * @see PHPCR_Item::save()
      */
     public function save() {
         $this->JRprop->save();
         $this->setModified(false);
         $this->setNew(false);
+    }
+    
+    /**
+     * Returns a Binary representation of the value of this property. A
+     * shortcut for Property.getValue().getBinary(). See Value.
+     *
+     * @return PHPCR_BinaryInterface A Binary representation of the value of this property.
+     * @throws PHPCR_ValueFormatException if the property is multi-valued.
+     * @throws PHPCR_RepositoryException if another error occurs
+     */
+    public function getBinary() {
+        //TODO: Insert Code
+    }
+    
+    /**
+     * Returns a BigDecimal representation of the value of this property. A
+     * shortcut for Property.getValue().getDecimal(). See Value.
+     *
+     * @return float A float representation of the value of this property.
+     * @throws PHPCR_ValueFormatException if conversion to a BigDecimal is not possible or if the property is multi-valued.
+     * @throws PHPCR_RepositoryException if another error occurs
+     */
+    public function getDecimal() {
+        //TODO: Insert Code
+    }
+    
+    /**
+     * If this property is of type PATH (or convertible to this type) this
+     * method returns the Property to which this property refers.
+     * If this property contains a relative path, it is interpreted relative
+     * to the parent node of this property. Therefore, when resolving such a
+     * relative path, the segment "." refers to the parent node itself, ".." to
+     * the parent of the parent node and "foo" to a sibling property of this
+     * property or this property itself.
+     *
+     * For example, if this property is located at /a/b/c and it has a value of
+     * "../d" then this method will return the property at /a/d if such exists.
+     *
+     * @return PHPCR_PropertyInterface the referenced property
+     * @throws PHPCR_ValueFormatException if this property cannot be converted to a PATH, if the property is multi-valued or if this property is a referring type but is currently part of the frozen state of a version in version storage.
+     * @throws PHPCR_ItemNotFoundException If no property accessible by the current Session exists in this workspace at the specified path. Note that this applies even if a node exists at the specified location. To dereference to a target node, the method Property.getNode is used.
+     * @throws PHPCR_RepositoryException if another error occurs
+     */
+    public function getProperty() {
+        //TODO: Insert Code
+    }
+    
+    /**
+     * Returns TRUE if this property is multi-valued and FALSE if this property
+     * is single-valued.
+     *
+     * @return boolean TRUE if this property is multi-valued; FALSE otherwise.
+     * @throws PHPCR_RepositoryException if an error occurs.
+     */
+    public function isMultiple() {
+        //TODO: Insert Code
     }
 }

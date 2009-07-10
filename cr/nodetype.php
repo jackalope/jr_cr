@@ -2,7 +2,7 @@
 // $Id$
 /**
  * This file contains {@link NodeDef} which is part of the PHP Content Repository
- * (phpCR), a derivative of the Java Content Repository JSR-170,  and is
+ * (PHPCR), a derivative of the Java Content Repository JSR-170,  and is
  * licensed under the Apache License, Version 2.0.
  *
  * This file is based on the code created for
@@ -27,8 +27,7 @@
  * @package phpContentRepository
  * @package NodeTypes
  */
-class jr_cr_nodetype implements phpCR_NodeType
-{
+class jr_cr_nodetype implements PHPCR_NodeTypeInterface {
 
     protected $JRnodetype = null;
 

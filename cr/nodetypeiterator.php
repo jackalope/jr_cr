@@ -2,7 +2,7 @@
 // $Id$
 /**
  * This file contains {@link NodeDef} which is part of the PHP Content Repository
- * (phpCR), a derivative of the Java Content Repository JSR-170,  and is
+ * (PHPCR), a derivative of the Java Content Repository JSR-170,  and is
  * licensed under the Apache License, Version 2.0.
  *
  * This file is based on the code created for
@@ -24,7 +24,7 @@
  * @package phpContentRepository
  * @package NodeTypes
  */
-class jr_cr_nodetypeiterator extends jr_cr_rangeiterator implements phpCR_NodeTypeIterator {
+class jr_cr_nodetypeiterator extends jr_cr_rangeiterator implements PHPCR_NodeTypeIteratorInterface {
 
     public function __construct($JRnodetypeiterator) {
         parent::__construct($JRnodetypeiterator);
@@ -45,7 +45,7 @@ class jr_cr_nodetypeiterator extends jr_cr_rangeiterator implements phpCR_NodeTy
         if ($this->valid()) {
             return $this->current();
         } else {
-            throw new phpCR_NoSuchElementException('nextNodeType called after end of iterator');
+            throw new PHPCR_NoSuchElementException('nextNodeType called after end of iterator');
         }
     }
 }

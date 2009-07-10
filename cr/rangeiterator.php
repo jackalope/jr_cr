@@ -1,9 +1,9 @@
 <?php
 
 /**
- * abstract iterator class to implement phpCR_RangeIterator behavior on top of a java.util.Iterator
+ * abstract iterator class to implement PHPCR_RangeIterator behavior on top of a java.util.Iterator
  */
-abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements phpCR_RangeIterator {
+abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements PHPCR_RangeIteratorInterface {
 
     /** @param jiterator a javax.jcr.RangeIterator instance */
     function __construct($jiterator) {
@@ -13,7 +13,7 @@ abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements phpCR_R
     /**
      *
      * @return int
-     * @see phpCR_RangeIterator::getPosition()
+     * @see PHPCR_RangeIterator::getPosition()
      */
     public  function getPosition() {
         return $this->pos;
@@ -22,7 +22,7 @@ abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements phpCR_R
     /**
      *
      * @return int
-     * @see phpCR_RangeIterator::getSize()
+     * @see PHPCR_RangeIterator::getSize()
      */
     public  function getSize() {
         return $this->Jiterator->getSize();
@@ -32,7 +32,7 @@ abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements phpCR_R
      *
      * @param int The non-negative number of elements to skip
      * @throws {@link NoSuchElementException} If skipped past the last element in the iterator.
-     * @see phpCR_RangeIterator::skip()
+     * @see PHPCR_RangeIterator::skip()
      */
     public function skip($skipNum) {
         if(isset($this->jobjects[$this->pos+$skipNum])) {
@@ -42,12 +42,12 @@ abstract class jr_cr_rangeiterator extends jr_cr_wrapiterator implements phpCR_R
                 $this->Jiterator->skip($skipNum-1);
                 $this->pos += $skipNum-1;
                 $this->next(); //load the element we landed at
-                if(!$this->valid()) throw new phpCR_NoSuchElementException('skipped beyond last element');
+                if(!$this->valid()) throw new PHPCR_NoSuchElementException('skipped beyond last element');
             } catch(JavaException $e) {
                 $str = split("\n", $e->getMessage(), 1);
                 $str = $str[0];
                 if (strstr($str, 'NoSuchElementException')) {
-                    throw new phpCR_NoSuchElementException($e->getMessage());
+                    throw new PHPCR_NoSuchElementException($e->getMessage());
                 } else {
                     throw $e;
                 }
