@@ -32,18 +32,6 @@ class jr_cr_session implements PHPCR_SessionInterface {
 
     /**
      *
-     * @throws {@link AccessControlException}
-     * If permission is denied.
-     * @throws {@link RepositoryException}
-     * If another error occurs.
-     * @see PHPCR_Session::checkPermission()
-     */
-    public function checkPermission($absPath, $actions) {
-        //TODO - Insert your code here
-    }
-
-    /**
-     *
      * @param absPath The path of the root of the subtree to be serialized.
      * This must be the path to a node, not a property
      * @param out The <i>OutputStream</i> to which the XML
@@ -782,7 +770,35 @@ class jr_cr_session implements PHPCR_SessionInterface {
      * @throws PHPCR_RepositoryException if an error occurs.
      */
     public function hasPermission($absPath, $actions) {
-        //TODO: Insert Code
+        try {
+            return $this->JRsession->hasPermission($absPath, $actions);
+        } catch (JavaException $e) {
+            throw new PHPCR_RepositoryException($e->getMessage());
+        }
+    }
+
+    /**
+     * @param string $absPath an absolute path.
+     * @param string $actions a comma separated list of action strings.
+     * @return void
+     * @throws AccessControlException if permission is denied.
+     * @throws RepositoryException if another error occurs.
+     * @see PHPCR_Session::checkPermission()
+     */
+    public function checkPermission($absPath, $actions) {
+        try {
+            $this->JRsession->checkPermission($absPath, $actions);
+        } catch (JavaException $e) {
+            $str = split("\n", $e->getMessage(), 1);
+            $str = $str[0];
+            if (strstr($str, 'AccessControlException')) {
+                throw new PHPCR_AccessControlException($e->getMessage());
+            } elseif (strstr($str, 'RepositoryException')) {
+                throw new PHPCR_RepositoryException($e->getMessage());
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -829,7 +845,32 @@ class jr_cr_session implements PHPCR_SessionInterface {
      * @throws PHPCR_RepositoryException if an error occurs
      */
     public function hasCapability($methodName, $target, array $arguments) {
-        //TODO: Insert Code
+        try {
+            if ($target instanceof jr_cr_node) {
+                $obj = $target->JRnode;
+            } elseif ($target instanceof jr_cr_property) {
+                $obj = $target->JRproperty;
+            } else {
+                throw new PHPCR_RepositoryException('Do not know how to handly the type of $target');
+            }
+            $args = array();
+            foreach($arguments as $argument) {
+                if (is_object($argument)) {
+                    if ($target instanceof jr_cr_node) {
+                        $args[] = $target->JRnode;
+                    } elseif ($target instanceof jr_cr_property) {
+                        $args[] = $target->JRproperty;
+                    } else {
+                        throw new PHPCR_RepositoryException('Do not know how to handly the type of $target');
+                    }
+                } else {
+                    $args[] = $argument; //primitives are added directly
+                }
+            }
+            return $this->JRsession->hasCapability($methodName, $obj, $args);
+        } catch (JavaException $e) {
+            throw new PHPCR_RepositoryException($e->getMessage());
+        }
     }
 
     /**
