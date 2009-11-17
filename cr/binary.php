@@ -1,5 +1,3 @@
-TODO TODO TODO
-
 <?php
 class jr_cr_binary implements PHPCR_BinaryInterface {
     protected $JRbinary;

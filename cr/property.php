@@ -1,15 +1,11 @@
 <?php
 class jr_cr_property implements PHPCR_PropertyInterface {
     /**
-     * Enter description here...
-     *
      * @var jr_cr_session
      */
     protected $session = null;
 
     /**
-     * Enter description here...
-     *
      * @var jr_cr_node
      */
     protected $parentNode = null;
@@ -68,7 +64,7 @@ class jr_cr_property implements PHPCR_PropertyInterface {
     /**
      *
      * @see Value, Value::getDate()
-     * @return object
+     * @return DateTime
      * A date representation of the value of this {@link Property}.
      * @see PHPCR_Property::getDate()
      */
@@ -90,6 +86,7 @@ class jr_cr_property implements PHPCR_PropertyInterface {
     }
 
     /**
+     * PHP does not distinct between float and double.
      *
      * @see getFloat(), Value::getDouble()
      * @return float
@@ -108,17 +105,6 @@ class jr_cr_property implements PHPCR_PropertyInterface {
      */
     public function getFloat() {
         return $this->getValue()->getFloat();
-    }
-
-    /**
-     *
-     * @see Value::getLong()
-     * @return int
-     * An integer representation of the value of this {@link Property}.
-     * @see PHPCR_Property::getInt()
-     */
-    public function getInt() {
-        return $this->getValue()->getInt();
     }
 
     /**
@@ -580,7 +566,8 @@ class jr_cr_property implements PHPCR_PropertyInterface {
      * @throws PHPCR_RepositoryException if another error occurs
      */
     public function getDecimal() {
-        return $this->JRprop->getDecimal()->doubleValue(); //php float and double are the smae, but we prefer the better precision 
+        return $this->JRprop->getDecimal()->doubleValue(); //php float and double are the smae, but we prefer the better precision
+
     }
 
     /**

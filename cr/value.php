@@ -29,50 +29,14 @@ class jr_cr_value implements PHPCR_ValueInterface {
     }
 
     /**
-     * Returns a number of the value. Which format can be given as param.
-     */
-    public function getNumber($float = false) {
-        try {
-            if (true === $float) {
-                $num = $this->JRvalue->getDouble();
-            } else {
-                $num = $this->JRvalue->getLong();
-            }
-        } catch (JavaException $e) {
-            $this->throwExceptionFromJava($e);
-        }
-
-        if (true === $float) {
-            return (float) $num;
-        } else {
-            return (int)  $num;
-        }
-    }
-
-    /**
-     * Returns the int representation of this value.
+     * Returns the integer representation of this value.
      *
-     * This method should always return exactly what {@link getInt()} does.
-     * It has been left as a requirement to satisfy JCR compliance.
+     * @throws PHPCR_ValueFormatException If conversion to a int is not possible.
+     * @throws PHPCR_RepositoryException If another error occurs.
      *
      * @return int
-     * @see getInt()
      */
     public function getLong() {
-        return $this->getInt();
-    }
-
-    /**
-     * Returns the int representation of this value.
-     *
-     * @return int
-     *
-     * @throws {@link ValueFormatException}
-     *    If conversion to a int is not possible.
-     * @throws {@link RepositoryException}
-     *    If another error occurs.
-     */
-    public function getInt() {
         return $this->getNumber();
     }
 
@@ -107,25 +71,15 @@ class jr_cr_value implements PHPCR_ValueInterface {
     }
 
     /**
-     * Returns the timestamp string of this value.
+     * Returns a DateTime representation of this value.
      *
-     * <b>PHP Note</b>: PHP does not have a default Calendar object.  This
-     * method has been adjusted to return a string representing a valid
-     * timestamp.
+     * The object returned is a copy of the stored value, so changes to it are
+     * not reflected in internal storage.
      *
-     * Future version of PHPCR may implement a simple date/time object to
-     * handle returning a mock of Java's Calendar object.
-     *
-     * Given the fluid nature of this method, it is advisable to throw a
-     * {@link ValidFormatException} on all {@link Value}s except those which
-     * must be returned as dates until a definitive return value is determined.
-     *
-     * @return string
-     *
-     * @throws {@link ValueFormatException}
-     *    If conversion to a timestamp/date is not possible.
-     * @throws {@link RepositoryException}
-     *    If another error occurs.
+     * @return DateTime A DateTime representation of the value of this property.
+     * @throws PHPCR_ValueFormatException if conversion to a DateTime is not possible.
+     * @throws PHPCR_RepositoryException if another error occurs.
+     * @api
      */
     public function getDate() {
         try {
@@ -147,10 +101,8 @@ class jr_cr_value implements PHPCR_ValueInterface {
      *
      * @return bool
      *
-     * @throws {@link ValueFormatException}
-     *    If conversion to a boolean is not possible.
-     * @throws {@link RepositoryException}
-     *    If another error occurs.
+     * @throws PHPCR_ValueFormatException If conversion to a boolean is not possible.
+     * @throws PHPCR_RepositoryException If another error occurs.
      */
     public function getBoolean() {
         try {
@@ -182,16 +134,7 @@ class jr_cr_value implements PHPCR_ValueInterface {
      * @return int
      */
     public function getType() {
-        //TODO: Insert code
-    }
-
-    protected function throwExceptionFromJava($e) {
-        $str = split("\n", $e->getMessage(), 2);
-        if (false !== strpos($str[0], 'ValueFormatException')) {
-            throw new PHPCR_ValueFormatException($e->getMessage());
-        } else {
-            throw new PHPCR_RepositoryException($e->getMessage());
-        }
+        return $this->JRvalue->getType();
     }
 
     /**
@@ -203,17 +146,55 @@ class jr_cr_value implements PHPCR_ValueInterface {
      * @throws PHPCR_RepositoryException if another error occurs.
      */
     public function getBinary() {
-        //TODO: Insert Code
+        return new jr_cr_binary($this->JRvalue->getBinary());
     }
 
     /**
      * Returns a BigDecimal representation of this value.
      *
-     * @return string A double representation of the value of this property.
+     * @return float A double representation of the value of this property.
      * @throws PHPCR_ValueFormatException if conversion is not possible.
      * @throws PHPCR_RepositoryException if another error occurs.
      */
     public function getDecimal() {
-        //TODO: Insert Code
+        return $this->getNumber(true);
+    }
+
+    /**
+     * Returns a number of the value. Which format can be given as param.
+     * Used internally for the various numerical get methods.
+     * In PHP, there is no distinction between float and double.
+     *
+     * @throws PHPCR_ValueFormatException if conversion is not possible.
+     * @throws PHPCR_RepositoryException if another error occurs.
+    *
+     * @param float boolean If true, will return float value, otherwise integer. defaults to false.
+     * @return int or float depending on parameter
+     */
+    protected function getNumber($float = false) {
+        try {
+            if (true === $float) {
+                $num = $this->JRvalue->getDouble();
+            } else {
+                $num = $this->JRvalue->getLong();
+            }
+        } catch (JavaException $e) {
+            $this->throwExceptionFromJava($e);
+        }
+
+        if (true === $float) {
+            return (float) $num;
+        } else {
+            return (int)  $num;
+        }
+    }
+
+    protected function throwExceptionFromJava($e) {
+        $str = split("\n", $e->getMessage(), 2);
+        if (false !== strpos($str[0], 'ValueFormatException')) {
+            throw new PHPCR_ValueFormatException($e->getMessage());
+        } else {
+            throw new PHPCR_RepositoryException($e->getMessage());
+        }
     }
 }
