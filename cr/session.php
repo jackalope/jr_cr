@@ -49,7 +49,7 @@ class jr_cr_session implements PHPCR_SessionInterface {
      * @todo Determine how to handle this
      * @see PHPCR_Session::exportDocumentView()
      */
-    public function exportDocumentView($absPath, XMLWriter $out, $skipBinary, $noRecurse) {
+    public function exportDocumentView($absPath, $out, $skipBinary, $noRecurse) {
         //TODO: Insert code here
     }
 
@@ -69,7 +69,7 @@ class jr_cr_session implements PHPCR_SessionInterface {
      * If another error occurs.
      * @see PHPCR_Session::exportSystemView()
      */
-    public function exportSystemView($absPath, XMLWriter $out, $skipBinary, $noRecurse) {
+    public function exportSystemView($absPath, $out, $skipBinary, $noRecurse) {
         //TODO - Insert your code here
     }
 

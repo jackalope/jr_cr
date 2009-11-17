@@ -246,7 +246,6 @@ class jr_cr_property implements PHPCR_PropertyInterface {
             $this->type =  $this->JRprop->getType();
         }
         return $this->type;
-        //TODO - Insert your code here
     }
 
     /**
@@ -569,7 +568,7 @@ class jr_cr_property implements PHPCR_PropertyInterface {
      * @throws PHPCR_RepositoryException if another error occurs
      */
     public function getBinary() {
-        //TODO: Insert Code
+        return new jr_cr_binary($this->JRprop->getBinary());
     }
 
     /**
@@ -581,7 +580,7 @@ class jr_cr_property implements PHPCR_PropertyInterface {
      * @throws PHPCR_RepositoryException if another error occurs
      */
     public function getDecimal() {
-        //TODO: Insert Code
+        return $this->JRprop->getDecimal()->doubleValue(); //php float and double are the smae, but we prefer the better precision 
     }
 
     /**
