@@ -1,0 +1,62 @@
+********************************
+phpCR Prototype with java bridge
+********************************
+http://liip.to/jackalope
+
+ebi at liip.ch
+david at liip.ch
+chregu at liip.ch
+
+*****
+Usage
+*****
+
+This is a prototype implementation of phpCR mapping all calls to the jackrabbit
+java client libraries. It requires the zend java bridge in order to use java
+inside PHP.
+http://github.com/k-fish/PHPCR
+
+To see how to set up the prototype, have a look at
+https://fosswiki.liip.ch/display/jackalope/Getting+the+jr_cr+prototype+running+with+Zend+Server
+
+To run the tests, make sure you use the phpunit from zend and not your system's
+phpunit binary.
+$ /usr/local/zend/bin/php-cli /usr/local/zend/bin/phpunit tests/level1/ReadTest.php
+
+*****
+Setup
+*****
+
+Setting up submodules
+*********************
+
+After the first clone, don't forget to
+
+git submodule init
+git submodule update
+
+Installing PHPUnit
+******************
+Make sure you use the pear from Zend.
+See http://www.phpunit.de/manual/current/en/installation.html
+$  /usr/local/zend/bin/pear install phpunit
+
+Dependencies
+************
+
+java in PATH
+PHPUnit in PATH
+PHPUnit in include_path
+
+Setting up Jackrabbit
+*********************
+- Create tests workspace which is different from your default workspace.
+See http://jackrabbit.apache.org/jackrabbit-configuration.html#JackrabbitConfiguration-Workspaceconfiguration
+Or:
+- Go to the directory you started jackrabbit-standalone (eg. /opt/svn/jackrabbit/jackrabbit-standalone/target)
+- cd jackrabbit
+- cd workspaces
+- cp -r default tests
+- cd tests
+- change <Workspace name="default"> to <Workspace name="tests">
+- start jackrabbit again
