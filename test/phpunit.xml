@@ -1,3 +1,4 @@
+<!-- make sure you are running this with the phpunit of your zend server and not your system phpunit! -->
 <phpunit bootstrap="bootstrap.php">
     <php>
         <var name="jcr.url" value="http://localhost:8080/server" />
