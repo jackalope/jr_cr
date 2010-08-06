@@ -1,0 +1,27 @@
+Testing jr_cr
+
+To run the tests, make sure you use the phpunit from zend and not your system's
+phpunit binary.
+$ /usr/local/zend/bin/php-cli /usr/local/zend/bin/phpunit tests/level1/ReadTest.php
+Make sure to have all necessary jackrabbit client .jar files in the classpath
+(see README in root folder)
+
+Read the README in the suite folder for how to prepare the jackrabbit backend.
+
+**************
+Implementation
+**************
+
+Packages at least partially used for level1 tests:
+javax.jcr               => ReadTest, AccessTest, ExportTest, NamespaceTest
+javax.jcr.query         must support javax.jcr.query.JCR-JQOM and javax.jcr.query.JCR-SQL2 => SearchTest
+javax.jcr.query.qom     Specify query object model => QueryObjectModelTest
+javax.jcr.nodetype      => NodeTypesTest
+javax.jcr.util
+
+Packages used for additional features
+javax.jcr.lock          Repository.OPTION_LOCKING_SUPPORTED => LockTest
+javax.jcr.observation   Repository.OPTION_OBSERVATION_SUPPORTED or Repository.OPTION_JOURNALED_OBSERVATION_SUPPORTED
+javax.jcr.retention     Repository.OPTION_RETENTION_SUPPORTED
+javax.jcr.security      Repository.OPTION_ACCESS_CONTROL_SUPPORTED => AccessControlTest
+javax.jcr.version       Repository.OPTION_SIMPLE_VERSIONING_SUPPORTED and Repository.OPTION_VERSIONING_SUPPORTED
