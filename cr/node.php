@@ -91,7 +91,7 @@ class jr_cr_node extends jr_cr_item implements PHPCR_NodeInterface {
                 return $node;
             }
         } catch (Exception $e) {
-
+            //ignore and continue, just wanted to make sure there is not already a node here
         }
         if (substr($relPath, 0, 1) == '/') {
             $node = $this->session->getRootNode();

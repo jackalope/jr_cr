@@ -672,7 +672,8 @@ class jr_cr_session implements PHPCR_SessionInterface {
             if (strstr($jritem->class->getName(), 'Node')) {
                 return new jr_cr_node($this, $jritem);
             } else {
-                return new jr_cr_property($this, $jritem);
+                $parentNode = new jr_cr_node($this, $jritem->getParent());
+                return new jr_cr_property($parentNode, $jritem);
             }
         } catch (Exception $e) {
             throw new PHPCR_PathNotFoundException($absPath);
