@@ -20,7 +20,14 @@ class jr_cr_binary implements PHPCR_BinaryInterface {
     * @api
     */
     public function getStream() {
-        //TODO: Code here
+        //pull stream into local file and return handle to that file
+        $s = $this->JRbinary->getStream();
+        $bytes = '';
+        while (($b = $s->read()) != -1) $bytes .= pack('c',$b);
+        $f = tmpfile();
+        fwrite($f, $bytes);
+        fseek($f,0);
+        return $f;
     }
 
     /**
@@ -39,19 +46,20 @@ class jr_cr_binary implements PHPCR_BinaryInterface {
     public function read(&$bytes, $position) {
         /* note: php array is mapped to java HashMap by the zend bridge.
          * found this hack at http://php-java-bridge.sourceforge.net/pjb/FAQ.html
-         * (note this is not about zend javabridge, but the problem is the same
+         * (note this is not about zend javabridge, but the problem is the same)
          */
 
-        $length = $this->getSize() - $position; //todo: give user possibility to control how much to read?
+        $s = $this->JRbinary->getStream();
+        $s->skip($position);
+        $buffer = '';
+        $c = 0;
 
-        $Byte = new Java("java.lang.Byte");
-        $byte = $Byte->TYPE; //byte.class == Byte.TYPE
-        $Array = new Java("java.lang.reflect.Array");
-        $byte_arr = $Array->newInstance($byte, $length);
+        while (($b = $s->read()) != -1) {
+            $buffer .= pack('c',$b);
+            $c++; //FIXME: in java, the bytes array has a fixed size, telling how much to read.
+        }
 
-        $c = $this->JRbinary->read($byte_arr, $position);
-        //FIXME: $byte_arr is filled with 0. but $c is correct.
-        $bytes = pack('C', $byte_arr);
+        $bytes = $buffer;
         return $c;
     }
 
